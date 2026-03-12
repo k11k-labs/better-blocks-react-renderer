@@ -1,6 +1,9 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "k11k-labs/better-blocks-react-renderer" }
+  ],
   "commit": false,
   "fixed": [],
   "linked": [],

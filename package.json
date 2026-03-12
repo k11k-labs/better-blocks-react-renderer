@@ -2,6 +2,7 @@
   "name": "@k11k/better-blocks-react-renderer",
   "version": "0.0.0",
   "description": "React renderer for Strapi v5 Blocks content with color and backgroundColor support from Better Blocks plugin",
+  "type": "commonjs",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -26,20 +27,28 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ts": "tsc --noEmit"
+    "test:ts": "tsc --noEmit",
+    "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,md,yml,yaml,css}": "prettier --write"
+  },
+  "dependencies": {},
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.30.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^25.0.1",
+    "lint-staged": "^16.3.3",
     "prettier": "^3.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -49,20 +58,33 @@
   },
   "keywords": [
     "strapi",
+    "strapi-v5",
     "blocks",
+    "blocks-renderer",
     "react",
     "renderer",
     "rich-text",
     "better-blocks",
     "color",
-    "highlight"
+    "highlight",
+    "text-color",
+    "background-color",
+    "cms",
+    "headless-cms"
   ],
+  "license": "MIT",
+  "author": "k11k-labs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/k11k-labs/better-blocks-react-renderer"
+    "url": "https://github.com/k11k-labs/better-blocks-react-renderer.git"
   },
-  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/k11k-labs/better-blocks-react-renderer/issues"
+  },
+  "homepage": "https://github.com/k11k-labs/better-blocks-react-renderer#readme",
   "engines": {
-    "node": ">=20.0.0"
-  }
+    "node": ">=20.0.0 <=24.x.x",
+    "npm": ">=6.0.0"
+  },
+  "packageManager": "yarn@1.22.22"
 }
