@@ -43,6 +43,7 @@ export type HeadingNode = {
 export type ListNode = {
   type: 'list';
   format: 'ordered' | 'unordered';
+  indentLevel?: number;
   children: (ListItemNode | ListNode)[];
 };
 
@@ -98,7 +99,9 @@ export type BlockComponentProps<T = Record<string, unknown>> = T & {
 export type CustomBlocksConfig = Partial<{
   paragraph: ComponentType<BlockComponentProps>;
   heading: ComponentType<BlockComponentProps<{ level: 1 | 2 | 3 | 4 | 5 | 6 }>>;
-  list: ComponentType<BlockComponentProps<{ format: 'ordered' | 'unordered' }>>;
+  list: ComponentType<
+    BlockComponentProps<{ format: 'ordered' | 'unordered'; indentLevel: number }>
+  >;
   'list-item': ComponentType<BlockComponentProps>;
   link: ComponentType<BlockComponentProps<{ url: string }>>;
   quote: ComponentType<BlockComponentProps>;

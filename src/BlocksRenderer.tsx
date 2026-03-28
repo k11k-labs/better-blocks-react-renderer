@@ -109,6 +109,14 @@ function renderInlineContent(
 
 // ── List Rendering ───────────────────────────────────────────────────
 
+const orderedStyles = ['decimal', 'lower-alpha', 'upper-roman'];
+const unorderedStyles = ['disc', 'circle', 'square'];
+
+function getListStyleType(format: 'ordered' | 'unordered', indentLevel: number): string {
+  const styles = format === 'ordered' ? orderedStyles : unorderedStyles;
+  return styles[indentLevel % styles.length];
+}
+
 function renderListItem(
   node: ListItemNode,
   key: number,
@@ -132,6 +140,7 @@ function renderList(
   modifiers?: CustomModifiersConfig
 ): ReactNode {
   const ListComp = blocks?.list;
+  const indentLevel = node.indentLevel || 0;
   const children = node.children.map((child, index) => {
     if (child.type === 'list-item') {
       return renderListItem(child, index, blocks, modifiers);
@@ -144,14 +153,19 @@ function renderList(
 
   if (ListComp) {
     return (
-      <ListComp key={key} format={node.format}>
+      <ListComp key={key} format={node.format} indentLevel={indentLevel}>
         {children}
       </ListComp>
     );
   }
 
   const Tag = node.format === 'ordered' ? 'ol' : 'ul';
-  return <Tag key={key}>{children}</Tag>;
+  const listStyleType = getListStyleType(node.format, indentLevel);
+  return (
+    <Tag key={key} style={{ listStyleType }}>
+      {children}
+    </Tag>
+  );
 }
 
 // ── Block Rendering ──────────────────────────────────────────────────
