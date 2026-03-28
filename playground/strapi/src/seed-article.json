@@ -116,15 +116,25 @@
     {
       "type": "list",
       "format": "unordered",
+      "indentLevel": 0,
       "children": [
-        { "type": "list-item", "children": [{ "type": "text", "text": "First item" }] },
+        { "type": "list-item", "children": [{ "type": "text", "text": "First item (disc)" }] },
         { "type": "list-item", "children": [{ "type": "text", "text": "Second item with " }, { "type": "text", "text": "bold", "bold": true }] },
         {
           "type": "list",
           "format": "unordered",
+          "indentLevel": 1,
           "children": [
-            { "type": "list-item", "children": [{ "type": "text", "text": "Nested item" }] },
-            { "type": "list-item", "children": [{ "type": "text", "text": "Another nested item", "color": "#E53E3E" }] }
+            { "type": "list-item", "children": [{ "type": "text", "text": "Nested item (circle)" }] },
+            { "type": "list-item", "children": [{ "type": "text", "text": "Another nested item", "color": "#E53E3E" }] },
+            {
+              "type": "list",
+              "format": "unordered",
+              "indentLevel": 2,
+              "children": [
+                { "type": "list-item", "children": [{ "type": "text", "text": "Deep nested item (square)" }] }
+              ]
+            }
           ]
         },
         { "type": "list-item", "children": [{ "type": "text", "text": "Third item" }] }
@@ -138,10 +148,50 @@
     {
       "type": "list",
       "format": "ordered",
+      "indentLevel": 0,
       "children": [
-        { "type": "list-item", "children": [{ "type": "text", "text": "Step one" }] },
+        { "type": "list-item", "children": [{ "type": "text", "text": "Step one (decimal)" }] },
         { "type": "list-item", "children": [{ "type": "text", "text": "Step two" }] },
+        {
+          "type": "list",
+          "format": "ordered",
+          "indentLevel": 1,
+          "children": [
+            { "type": "list-item", "children": [{ "type": "text", "text": "Sub-step (lower-alpha)" }] },
+            {
+              "type": "list",
+              "format": "ordered",
+              "indentLevel": 2,
+              "children": [
+                { "type": "list-item", "children": [{ "type": "text", "text": "Detail (upper-roman)" }] }
+              ]
+            }
+          ]
+        },
         { "type": "list-item", "children": [{ "type": "text", "text": "Step three" }] }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "children": [{ "type": "text", "text": "Mixed nested list" }]
+    },
+    {
+      "type": "list",
+      "format": "unordered",
+      "indentLevel": 0,
+      "children": [
+        { "type": "list-item", "children": [{ "type": "text", "text": "Bullet point" }] },
+        {
+          "type": "list",
+          "format": "ordered",
+          "indentLevel": 1,
+          "children": [
+            { "type": "list-item", "children": [{ "type": "text", "text": "Numbered inside bullets" }] },
+            { "type": "list-item", "children": [{ "type": "text", "text": "Another numbered item" }] }
+          ]
+        },
+        { "type": "list-item", "children": [{ "type": "text", "text": "Back to bullets" }] }
       ]
     },
     {

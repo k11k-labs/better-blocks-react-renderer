@@ -223,6 +223,118 @@ describe('BlocksRenderer', () => {
     expect(outerUl).toBeInTheDocument();
   });
 
+  it('applies cycling list-style-type for unordered lists based on indentLevel', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'unordered',
+        indentLevel: 0,
+        children: [
+          { type: 'list-item', children: [{ type: 'text', text: 'Level 0' }] },
+          {
+            type: 'list',
+            format: 'unordered',
+            indentLevel: 1,
+            children: [
+              { type: 'list-item', children: [{ type: 'text', text: 'Level 1' }] },
+              {
+                type: 'list',
+                format: 'unordered',
+                indentLevel: 2,
+                children: [{ type: 'list-item', children: [{ type: 'text', text: 'Level 2' }] }],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const uls = container.querySelectorAll('ul');
+    expect(uls[0]).toHaveStyle({ listStyleType: 'disc' });
+    expect(uls[1]).toHaveStyle({ listStyleType: 'circle' });
+    expect(uls[2]).toHaveStyle({ listStyleType: 'square' });
+  });
+
+  it('applies cycling list-style-type for ordered lists based on indentLevel', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'ordered',
+        indentLevel: 0,
+        children: [
+          { type: 'list-item', children: [{ type: 'text', text: 'Level 0' }] },
+          {
+            type: 'list',
+            format: 'ordered',
+            indentLevel: 1,
+            children: [
+              { type: 'list-item', children: [{ type: 'text', text: 'Level 1' }] },
+              {
+                type: 'list',
+                format: 'ordered',
+                indentLevel: 2,
+                children: [{ type: 'list-item', children: [{ type: 'text', text: 'Level 2' }] }],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const ols = container.querySelectorAll('ol');
+    expect(ols[0]).toHaveStyle({ listStyleType: 'decimal' });
+    expect(ols[1]).toHaveStyle({ listStyleType: 'lower-alpha' });
+    expect(ols[2]).toHaveStyle({ listStyleType: 'upper-roman' });
+  });
+
+  it('cycles list-style-type back to start after exhausting styles', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'unordered',
+        indentLevel: 3,
+        children: [{ type: 'list-item', children: [{ type: 'text', text: 'Level 3' }] }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    // indentLevel 3 % 3 = 0 → disc (cycles back)
+    expect(container.querySelector('ul')).toHaveStyle({ listStyleType: 'disc' });
+  });
+
+  it('defaults to indentLevel 0 when not provided', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'unordered',
+        children: [{ type: 'list-item', children: [{ type: 'text', text: 'No indent' }] }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('ul')).toHaveStyle({ listStyleType: 'disc' });
+  });
+
+  it('supports mixed ordered/unordered nested lists with indentLevel', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'unordered',
+        indentLevel: 0,
+        children: [
+          { type: 'list-item', children: [{ type: 'text', text: 'Bullet' }] },
+          {
+            type: 'list',
+            format: 'ordered',
+            indentLevel: 1,
+            children: [{ type: 'list-item', children: [{ type: 'text', text: 'Numbered' }] }],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('ul')).toHaveStyle({ listStyleType: 'disc' });
+    expect(container.querySelector('ol')).toHaveStyle({ listStyleType: 'lower-alpha' });
+  });
+
   // ── Quote ────────────────────────────────────────────────────────
 
   it('renders blockquote', () => {
