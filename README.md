@@ -1,6 +1,6 @@
 <h1 align="center">Better Blocks React Renderer</h1>
 
-<p align="center">React renderer for Strapi v5 Blocks content with inline text color, background highlight, and all standard marks.</p>
+<p align="center">React renderer for Strapi v5 Blocks content — supports all standard blocks plus Better Blocks features: color, highlight, text alignment, nested lists, to-do lists, tables, media embeds, image captions, and more.</p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@k11k/better-blocks-react-renderer">
@@ -37,9 +37,9 @@
 
 ## Why?
 
-The official [`@strapi/blocks-react-renderer`](https://github.com/strapi/blocks-react-renderer) doesn't support the extra marks (`color`, `backgroundColor`) that the [Better Blocks](https://github.com/k11k-labs/strapi-plugin-better-blocks) plugin adds to the Strapi editor.
+The official [`@strapi/blocks-react-renderer`](https://github.com/strapi/blocks-react-renderer) doesn't support the features that the [Better Blocks](https://github.com/k11k-labs/strapi-plugin-better-blocks) plugin adds to the Strapi editor &mdash; color marks, text alignment, to-do lists, tables, media embeds, and more.
 
-This package is a **drop-in replacement** that renders them out of the box &mdash; no configuration needed.
+This package is a **drop-in replacement** that renders all Better Blocks features out of the box &mdash; no configuration needed.
 
 ## Compatibility
 
@@ -72,16 +72,34 @@ That's it. Colors and highlights work automatically.
 
 ## Supported Blocks
 
-| Block                      | Default element     |
-| -------------------------- | ------------------- |
-| `paragraph`                | `<p>`               |
-| `heading` (1&ndash;6)      | `<h1>`&ndash;`<h6>` |
-| `list` (ordered/unordered) | `<ol>` / `<ul>`     |
-| `list-item`                | `<li>`              |
-| `link`                     | `<a>`               |
-| `quote`                    | `<blockquote>`      |
-| `code`                     | `<pre><code>`       |
-| `image`                    | `<img>`             |
+| Block                           | Default element     | Source                      |
+| ------------------------------- | ------------------- | --------------------------- |
+| `paragraph`                     | `<p>`               | Strapi core                 |
+| `heading` (1&ndash;6)           | `<h1>`&ndash;`<h6>` | Strapi core                 |
+| `list` (ordered/unordered/todo) | `<ol>` / `<ul>`     | Strapi core + Better Blocks |
+| `list-item`                     | `<li>`              | Strapi core                 |
+| `link`                          | `<a>`               | Strapi core                 |
+| `quote`                         | `<blockquote>`      | Strapi core                 |
+| `code`                          | `<pre><code>`       | Strapi core                 |
+| `image`                         | `<figure><img>`     | Strapi core                 |
+| `horizontal-line`               | `<hr>`              | Better Blocks               |
+| `table`                         | `<table>`           | Better Blocks               |
+| `media-embed`                   | `<iframe>` (16:9)   | Better Blocks               |
+
+### Block properties
+
+| Property      | Applies to                | Description                                           |
+| ------------- | ------------------------- | ----------------------------------------------------- |
+| `textAlign`   | paragraph, heading, quote | Text alignment (`left`, `center`, `right`, `justify`) |
+| `indentLevel` | list                      | Cycling list-style-type per nesting depth             |
+| `format`      | list                      | `ordered`, `unordered`, or `todo`                     |
+| `checked`     | list-item (in todo lists) | Checkbox state (`true`/`false`)                       |
+| `target`      | link                      | `_blank` for new-tab links                            |
+| `rel`         | link                      | `noopener noreferrer` for new-tab links               |
+| `caption`     | image                     | Text displayed below the image                        |
+| `imageAlign`  | image                     | Image alignment (`left`, `center`, `right`)           |
+| `url`         | media-embed               | Embed URL (YouTube/Vimeo iframe src)                  |
+| `originalUrl` | media-embed               | Original user-provided URL                            |
 
 ## Supported Modifiers
 
@@ -105,17 +123,43 @@ Override any block type with your own component:
 <BlocksRenderer
   content={blocks}
   blocks={{
-    paragraph: ({ children }) => <p className="my-paragraph">{children}</p>,
-    heading: ({ children, level }) => {
+    paragraph: ({ children, style }) => (
+      <p className="my-paragraph" style={style}>
+        {children}
+      </p>
+    ),
+    heading: ({ children, level, style }) => {
       const Tag = `h${level}`;
-      return <Tag>{children}</Tag>;
+      return <Tag style={style}>{children}</Tag>;
     },
-    link: ({ children, url }) => (
-      <a href={url} target="_blank" rel="noopener noreferrer">
+    link: ({ children, url, target, rel }) => (
+      <a href={url} target={target} rel={rel}>
         {children}
       </a>
     ),
-    image: ({ image }) => <img src={image.url} alt={image.alternativeText || ''} loading="lazy" />,
+    image: ({ image, caption, imageAlign }) => (
+      <figure style={{ textAlign: imageAlign }}>
+        <img src={image.url} alt={image.alternativeText || ''} loading="lazy" />
+        {caption && <figcaption>{caption}</figcaption>}
+      </figure>
+    ),
+    'list-item': ({ children, checked }) =>
+      checked !== undefined ? (
+        <li style={{ listStyle: 'none' }}>
+          <input type="checkbox" checked={checked} readOnly /> {children}
+        </li>
+      ) : (
+        <li>{children}</li>
+      ),
+    'horizontal-line': () => <hr className="my-divider" />,
+    table: ({ children }) => <table className="my-table">{children}</table>,
+    'table-header-cell': ({ children }) => <th className="my-th">{children}</th>,
+    'table-cell': ({ children }) => <td className="my-td">{children}</td>,
+    'media-embed': ({ url }) => (
+      <div className="video-wrapper">
+        <iframe src={url} allowFullScreen title="Embedded media" />
+      </div>
+    ),
   }}
 />
 ```
@@ -147,6 +191,21 @@ import type {
   BlocksRendererProps,
   BlockNode,
   TextNode,
+  LinkNode,
+  ListNode,
+  ListItemNode,
+  ParagraphNode,
+  HeadingNode,
+  QuoteNode,
+  CodeNode,
+  ImageNode,
+  HorizontalLineNode,
+  TableNode,
+  TableRowNode,
+  TableCellNode,
+  TableHeaderCellNode,
+  MediaEmbedNode,
+  TextAlign,
   CustomBlocksConfig,
   CustomModifiersConfig,
 } from '@k11k/better-blocks-react-renderer';

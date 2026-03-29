@@ -356,7 +356,7 @@
     {
       "type": "image",
       "image": {
-        "url": "https://placehold.co/600x200/7C3AED/white?text=Better+Blocks",
+        "url": "https://picsum.photos/600/200?random=3",
         "alternativeText": "Better Blocks placeholder image",
         "width": 600,
         "height": 200
@@ -373,7 +373,7 @@
     {
       "type": "image",
       "image": {
-        "url": "https://placehold.co/200x100/3182CE/white?text=Left",
+        "url": "https://picsum.photos/200/100?random=1",
         "alternativeText": "Left-aligned image",
         "width": 200,
         "height": 100
@@ -384,7 +384,7 @@
     {
       "type": "image",
       "image": {
-        "url": "https://placehold.co/200x100/38A169/white?text=Right",
+        "url": "https://picsum.photos/200/100?random=2",
         "alternativeText": "Right-aligned image",
         "width": 200,
         "height": 100
