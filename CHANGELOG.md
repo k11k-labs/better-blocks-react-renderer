@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.3.0
+
+### Minor Changes
+
+- [#7](https://github.com/k11k-labs/better-blocks-react-renderer/pull/7) [`53d7fba`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/53d7fba63ecb6cd7656ad092029568da46ac4def) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for Better Blocks plugin v0.4.0 features: horizontal line, link target/rel, text alignment, to-do lists, tables, media embeds, image captions and alignment
+
 ## 0.2.0
 
 ### Minor Changes
