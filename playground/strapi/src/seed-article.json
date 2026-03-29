@@ -83,6 +83,54 @@
     {
       "type": "heading",
       "level": 2,
+      "children": [{ "type": "text", "text": "Text Alignment" }]
+    },
+    {
+      "type": "paragraph",
+      "textAlign": "left",
+      "children": [{ "type": "text", "text": "Left-aligned paragraph (default)." }]
+    },
+    {
+      "type": "paragraph",
+      "textAlign": "center",
+      "children": [{ "type": "text", "text": "Center-aligned paragraph." }]
+    },
+    {
+      "type": "paragraph",
+      "textAlign": "right",
+      "children": [{ "type": "text", "text": "Right-aligned paragraph." }]
+    },
+    {
+      "type": "paragraph",
+      "textAlign": "justify",
+      "children": [{ "type": "text", "text": "Justified paragraph. This text is longer to demonstrate how justify alignment distributes spacing evenly across the full width of the container." }]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "textAlign": "center",
+      "children": [{ "type": "text", "text": "Centered Heading" }]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Horizontal Line" }]
+    },
+    {
+      "type": "paragraph",
+      "children": [{ "type": "text", "text": "Content above the line." }]
+    },
+    {
+      "type": "horizontal-line",
+      "children": [{ "type": "text", "text": "" }]
+    },
+    {
+      "type": "paragraph",
+      "children": [{ "type": "text", "text": "Content below the line." }]
+    },
+    {
+      "type": "heading",
+      "level": 2,
       "children": [{ "type": "text", "text": "Links" }]
     },
     {
@@ -98,7 +146,9 @@
         {
           "type": "link",
           "url": "https://github.com/k11k-labs/strapi-plugin-better-blocks",
-          "children": [{ "type": "text", "text": "the Strapi plugin", "bold": true }]
+          "target": "_blank",
+          "rel": "noopener noreferrer",
+          "children": [{ "type": "text", "text": "the Strapi plugin (opens in new tab)", "bold": true }]
         },
         { "type": "text", "text": "." }
       ]
@@ -196,6 +246,22 @@
     },
     {
       "type": "heading",
+      "level": 3,
+      "children": [{ "type": "text", "text": "To-do list" }]
+    },
+    {
+      "type": "list",
+      "format": "todo",
+      "indentLevel": 0,
+      "children": [
+        { "type": "list-item", "checked": true, "children": [{ "type": "text", "text": "Set up project" }] },
+        { "type": "list-item", "checked": true, "children": [{ "type": "text", "text": "Implement renderer" }] },
+        { "type": "list-item", "checked": false, "children": [{ "type": "text", "text": "Write documentation" }] },
+        { "type": "list-item", "checked": false, "children": [{ "type": "text", "text": "Publish to npm" }] }
+      ]
+    },
+    {
+      "type": "heading",
       "level": 2,
       "children": [{ "type": "text", "text": "Blockquote" }]
     },
@@ -204,6 +270,13 @@
       "children": [
         { "type": "text", "text": "The best way to predict the future is to invent it.", "italic": true },
         { "type": "text", "text": " — Alan Kay" }
+      ]
+    },
+    {
+      "type": "quote",
+      "textAlign": "center",
+      "children": [
+        { "type": "text", "text": "Centered quote with alignment.", "italic": true }
       ]
     },
     {
@@ -220,16 +293,114 @@
     {
       "type": "heading",
       "level": 2,
+      "children": [{ "type": "text", "text": "Table" }]
+    },
+    {
+      "type": "table",
+      "children": [
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-header-cell", "children": [{ "type": "text", "text": "Feature" }] },
+            { "type": "table-header-cell", "children": [{ "type": "text", "text": "Status" }] },
+            { "type": "table-header-cell", "children": [{ "type": "text", "text": "Phase" }] }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Horizontal line" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "1" }] }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Text alignment" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Tables" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-cell", "children": [{ "type": "text", "text": "To-do lists" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Media embeds" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
       "children": [{ "type": "text", "text": "Image" }]
     },
     {
       "type": "image",
       "image": {
-        "url": "https://placehold.co/600x200/7C3AED/white?text=Better+Blocks",
+        "url": "https://picsum.photos/600/200?random=3",
         "alternativeText": "Better Blocks placeholder image",
         "width": 600,
         "height": 200
       },
+      "caption": "Better Blocks — a rich-text editor plugin for Strapi v5",
+      "imageAlign": "center",
+      "children": [{ "type": "text", "text": "" }]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "children": [{ "type": "text", "text": "Image alignment" }]
+    },
+    {
+      "type": "image",
+      "image": {
+        "url": "https://picsum.photos/200/100?random=1",
+        "alternativeText": "Left-aligned image",
+        "width": 200,
+        "height": 100
+      },
+      "imageAlign": "left",
+      "children": [{ "type": "text", "text": "" }]
+    },
+    {
+      "type": "image",
+      "image": {
+        "url": "https://picsum.photos/200/100?random=2",
+        "alternativeText": "Right-aligned image",
+        "width": 200,
+        "height": 100
+      },
+      "imageAlign": "right",
+      "children": [{ "type": "text", "text": "" }]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Media Embed" }]
+    },
+    {
+      "type": "media-embed",
+      "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "originalUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "children": [{ "type": "text", "text": "" }]
     },
     {
@@ -239,7 +410,7 @@
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "All features working!", "bold": true, "color": "#38A169" }
+        { "type": "text", "text": "All features working! 🎉", "bold": true, "color": "#38A169" }
       ]
     }
   ]
