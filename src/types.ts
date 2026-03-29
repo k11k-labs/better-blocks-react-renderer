@@ -1,4 +1,4 @@
-import type { ReactNode, ComponentType } from 'react';
+import type { ReactNode, ComponentType, CSSProperties } from 'react';
 
 // ── Text & Inline Nodes ──────────────────────────────────────────────
 
@@ -17,38 +17,48 @@ export type TextNode = {
 export type LinkNode = {
   type: 'link';
   url: string;
+  target?: '_blank' | '_self';
+  rel?: string;
   children: TextNode[];
 };
 
 export type InlineNode = TextNode | LinkNode;
 
+// ── Text Alignment ──────────────────────────────────────────────────
+
+export type TextAlign = 'left' | 'center' | 'right' | 'justify';
+
 // ── Block Nodes ──────────────────────────────────────────────────────
 
 export type ListItemNode = {
   type: 'list-item';
+  checked?: boolean;
   children: InlineNode[];
 };
 
 export type ParagraphNode = {
   type: 'paragraph';
+  textAlign?: TextAlign;
   children: InlineNode[];
 };
 
 export type HeadingNode = {
   type: 'heading';
   level: 1 | 2 | 3 | 4 | 5 | 6;
+  textAlign?: TextAlign;
   children: InlineNode[];
 };
 
 export type ListNode = {
   type: 'list';
-  format: 'ordered' | 'unordered';
+  format: 'ordered' | 'unordered' | 'todo';
   indentLevel?: number;
   children: (ListItemNode | ListNode)[];
 };
 
 export type QuoteNode = {
   type: 'quote';
+  textAlign?: TextAlign;
   children: InlineNode[];
 };
 
@@ -65,10 +75,53 @@ export type ImageNode = {
     width?: number;
     height?: number;
   };
+  caption?: string;
+  imageAlign?: 'left' | 'center' | 'right';
   children: [{ type: 'text'; text: '' }];
 };
 
-export type BlockNode = ParagraphNode | HeadingNode | ListNode | QuoteNode | CodeNode | ImageNode;
+export type HorizontalLineNode = {
+  type: 'horizontal-line';
+  children: [{ type: 'text'; text: '' }];
+};
+
+export type TableCellNode = {
+  type: 'table-cell';
+  children: InlineNode[];
+};
+
+export type TableHeaderCellNode = {
+  type: 'table-header-cell';
+  children: InlineNode[];
+};
+
+export type TableRowNode = {
+  type: 'table-row';
+  children: (TableCellNode | TableHeaderCellNode)[];
+};
+
+export type TableNode = {
+  type: 'table';
+  children: TableRowNode[];
+};
+
+export type MediaEmbedNode = {
+  type: 'media-embed';
+  url: string;
+  originalUrl?: string;
+  children: [{ type: 'text'; text: '' }];
+};
+
+export type BlockNode =
+  | ParagraphNode
+  | HeadingNode
+  | ListNode
+  | QuoteNode
+  | CodeNode
+  | ImageNode
+  | HorizontalLineNode
+  | TableNode
+  | MediaEmbedNode;
 
 export type BlocksContent = BlockNode[];
 
@@ -97,19 +150,29 @@ export type BlockComponentProps<T = Record<string, unknown>> = T & {
 // ── Custom Renderers Config ──────────────────────────────────────────
 
 export type CustomBlocksConfig = Partial<{
-  paragraph: ComponentType<BlockComponentProps>;
-  heading: ComponentType<BlockComponentProps<{ level: 1 | 2 | 3 | 4 | 5 | 6 }>>;
-  list: ComponentType<
-    BlockComponentProps<{ format: 'ordered' | 'unordered'; indentLevel: number }>
+  paragraph: ComponentType<BlockComponentProps<{ style?: CSSProperties }>>;
+  heading: ComponentType<
+    BlockComponentProps<{ level: 1 | 2 | 3 | 4 | 5 | 6; style?: CSSProperties }>
   >;
-  'list-item': ComponentType<BlockComponentProps>;
-  link: ComponentType<BlockComponentProps<{ url: string }>>;
-  quote: ComponentType<BlockComponentProps>;
+  list: ComponentType<
+    BlockComponentProps<{ format: 'ordered' | 'unordered' | 'todo'; indentLevel: number }>
+  >;
+  'list-item': ComponentType<BlockComponentProps<{ checked?: boolean }>>;
+  link: ComponentType<BlockComponentProps<{ url: string; target?: string; rel?: string }>>;
+  quote: ComponentType<BlockComponentProps<{ style?: CSSProperties }>>;
   code: ComponentType<BlockComponentProps<{ plainText: string }>>;
   image: ComponentType<{
     image: { url: string; alternativeText?: string | null; width?: number; height?: number };
+    caption?: string;
+    imageAlign?: 'left' | 'center' | 'right';
     children?: ReactNode;
   }>;
+  'horizontal-line': ComponentType<Record<string, unknown>>;
+  table: ComponentType<BlockComponentProps>;
+  'table-row': ComponentType<BlockComponentProps>;
+  'table-cell': ComponentType<BlockComponentProps>;
+  'table-header-cell': ComponentType<BlockComponentProps>;
+  'media-embed': ComponentType<{ url: string; originalUrl?: string }>;
 }>;
 
 export type CustomModifiersConfig = Partial<{
