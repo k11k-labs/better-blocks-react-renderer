@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment, type CSSProperties, type ReactNode } from 'react';
 
 import type {
   BlockNode,
@@ -7,12 +7,15 @@ import type {
   CustomBlocksConfig,
   CustomModifiersConfig,
   HeadingNode,
+  HorizontalLineNode,
   ImageNode,
   InlineNode,
   ListItemNode,
   ListNode,
+  MediaEmbedNode,
   ParagraphNode,
   QuoteNode,
+  TableNode,
   TextNode,
 } from './types';
 
@@ -93,11 +96,11 @@ function renderInlineContent(
       );
 
       return LinkComp ? (
-        <LinkComp key={index} url={child.url}>
+        <LinkComp key={index} url={child.url} target={child.target} rel={child.rel}>
           {linkChildren}
         </LinkComp>
       ) : (
-        <a key={index} href={child.url}>
+        <a key={index} href={child.url} target={child.target} rel={child.rel}>
           {linkChildren}
         </a>
       );
@@ -120,17 +123,34 @@ function getListStyleType(format: 'ordered' | 'unordered', indentLevel: number):
 function renderListItem(
   node: ListItemNode,
   key: number,
+  isTodo: boolean,
   blocks?: CustomBlocksConfig,
   modifiers?: CustomModifiersConfig
 ): ReactNode {
   const ListItemComp = blocks?.['list-item'];
   const children = renderInlineContent(node.children, blocks, modifiers);
 
-  return ListItemComp ? (
-    <ListItemComp key={key}>{children}</ListItemComp>
-  ) : (
-    <li key={key}>{children}</li>
-  );
+  if (ListItemComp) {
+    return (
+      <ListItemComp key={key} checked={isTodo ? node.checked : undefined}>
+        {children}
+      </ListItemComp>
+    );
+  }
+
+  if (isTodo) {
+    const checked = node.checked ?? false;
+    return (
+      <li key={key} style={{ listStyle: 'none' }}>
+        <input type="checkbox" checked={checked} readOnly style={{ marginRight: '0.5em' }} />
+        <span style={checked ? { textDecoration: 'line-through', opacity: 0.6 } : undefined}>
+          {children}
+        </span>
+      </li>
+    );
+  }
+
+  return <li key={key}>{children}</li>;
 }
 
 function renderList(
@@ -141,9 +161,10 @@ function renderList(
 ): ReactNode {
   const ListComp = blocks?.list;
   const indentLevel = node.indentLevel || 0;
+  const isTodo = node.format === 'todo';
   const children = node.children.map((child, index) => {
     if (child.type === 'list-item') {
-      return renderListItem(child, index, blocks, modifiers);
+      return renderListItem(child, index, isTodo, blocks, modifiers);
     }
     if (child.type === 'list') {
       return renderList(child, index, blocks, modifiers);
@@ -159,12 +180,61 @@ function renderList(
     );
   }
 
+  if (isTodo) {
+    return (
+      <ul key={key} style={{ listStyle: 'none', paddingLeft: indentLevel > 0 ? '1.5em' : 0 }}>
+        {children}
+      </ul>
+    );
+  }
+
   const Tag = node.format === 'ordered' ? 'ol' : 'ul';
-  const listStyleType = getListStyleType(node.format, indentLevel);
+  const listStyleType = getListStyleType(node.format as 'ordered' | 'unordered', indentLevel);
   return (
     <Tag key={key} style={{ listStyleType }}>
       {children}
     </Tag>
+  );
+}
+
+// ── Table Rendering ──────────────────────────────────────────────────
+
+function renderTable(
+  block: TableNode,
+  key: number,
+  blocks?: CustomBlocksConfig,
+  modifiers?: CustomModifiersConfig
+): ReactNode {
+  const TableComp = blocks?.table;
+  const RowComp = blocks?.['table-row'];
+  const CellComp = blocks?.['table-cell'];
+  const HeaderCellComp = blocks?.['table-header-cell'];
+
+  const rows = block.children.map((row, rowIndex) => {
+    const cells = row.children.map((cell, cellIndex) => {
+      const cellChildren = renderInlineContent(cell.children, blocks, modifiers);
+      const isHeader = cell.type === 'table-header-cell';
+
+      if (isHeader && HeaderCellComp) {
+        return <HeaderCellComp key={cellIndex}>{cellChildren}</HeaderCellComp>;
+      }
+      if (!isHeader && CellComp) {
+        return <CellComp key={cellIndex}>{cellChildren}</CellComp>;
+      }
+
+      const CellTag = isHeader ? 'th' : 'td';
+      return <CellTag key={cellIndex}>{cellChildren}</CellTag>;
+    });
+
+    return RowComp ? <RowComp key={rowIndex}>{cells}</RowComp> : <tr key={rowIndex}>{cells}</tr>;
+  });
+
+  return TableComp ? (
+    <TableComp key={key}>{rows}</TableComp>
+  ) : (
+    <table key={key}>
+      <tbody>{rows}</tbody>
+    </table>
   );
 }
 
@@ -199,6 +269,12 @@ function renderBlock(
       return renderCode(block, key, blocks);
     case 'image':
       return renderImage(block, key, blocks);
+    case 'horizontal-line':
+      return renderHorizontalLine(block, key, blocks);
+    case 'table':
+      return renderTable(block, key, blocks, modifiers);
+    case 'media-embed':
+      return renderMediaEmbed(block, key, blocks);
     default:
       return null;
   }
@@ -212,11 +288,18 @@ function renderParagraph(
 ): ReactNode {
   const ParagraphComp = blocks?.paragraph;
   const children = renderInlineContent(block.children, blocks, modifiers);
+  const style: CSSProperties | undefined = block.textAlign
+    ? { textAlign: block.textAlign }
+    : undefined;
 
   return ParagraphComp ? (
-    <ParagraphComp key={key}>{children}</ParagraphComp>
+    <ParagraphComp key={key} style={style}>
+      {children}
+    </ParagraphComp>
   ) : (
-    <p key={key}>{children}</p>
+    <p key={key} style={style}>
+      {children}
+    </p>
   );
 }
 
@@ -228,17 +311,24 @@ function renderHeading(
 ): ReactNode {
   const HeadingComp = blocks?.heading;
   const children = renderInlineContent(block.children, blocks, modifiers);
+  const style: CSSProperties | undefined = block.textAlign
+    ? { textAlign: block.textAlign }
+    : undefined;
 
   if (HeadingComp) {
     return (
-      <HeadingComp key={key} level={block.level}>
+      <HeadingComp key={key} level={block.level} style={style}>
         {children}
       </HeadingComp>
     );
   }
 
   const Tag = `h${block.level}` as const;
-  return <Tag key={key}>{children}</Tag>;
+  return (
+    <Tag key={key} style={style}>
+      {children}
+    </Tag>
+  );
 }
 
 function renderQuote(
@@ -249,11 +339,18 @@ function renderQuote(
 ): ReactNode {
   const QuoteComp = blocks?.quote;
   const children = renderInlineContent(block.children, blocks, modifiers);
+  const style: CSSProperties | undefined = block.textAlign
+    ? { textAlign: block.textAlign }
+    : undefined;
 
   return QuoteComp ? (
-    <QuoteComp key={key}>{children}</QuoteComp>
+    <QuoteComp key={key} style={style}>
+      {children}
+    </QuoteComp>
   ) : (
-    <blockquote key={key}>{children}</blockquote>
+    <blockquote key={key} style={style}>
+      {children}
+    </blockquote>
   );
 }
 
@@ -280,17 +377,63 @@ function renderImage(block: ImageNode, key: number, blocks?: CustomBlocksConfig)
   const ImageComp = blocks?.image;
 
   if (ImageComp) {
-    return <ImageComp key={key} image={block.image} />;
+    return (
+      <ImageComp
+        key={key}
+        image={block.image}
+        caption={block.caption}
+        imageAlign={block.imageAlign}
+      />
+    );
+  }
+
+  const align = block.imageAlign || 'center';
+  const alignStyle: CSSProperties = {
+    textAlign: align,
+  };
+
+  return (
+    <figure key={key} style={alignStyle}>
+      <img
+        src={block.image.url}
+        alt={block.image.alternativeText || ''}
+        width={block.image.width}
+        height={block.image.height}
+      />
+      {block.caption && <figcaption>{block.caption}</figcaption>}
+    </figure>
+  );
+}
+
+function renderHorizontalLine(
+  _block: HorizontalLineNode,
+  key: number,
+  blocks?: CustomBlocksConfig
+): ReactNode {
+  const HrComp = blocks?.['horizontal-line'];
+  return HrComp ? <HrComp key={key} /> : <hr key={key} />;
+}
+
+function renderMediaEmbed(
+  block: MediaEmbedNode,
+  key: number,
+  blocks?: CustomBlocksConfig
+): ReactNode {
+  const EmbedComp = blocks?.['media-embed'];
+
+  if (EmbedComp) {
+    return <EmbedComp key={key} url={block.url} originalUrl={block.originalUrl} />;
   }
 
   return (
-    <img
-      key={key}
-      src={block.image.url}
-      alt={block.image.alternativeText || ''}
-      width={block.image.width}
-      height={block.image.height}
-    />
+    <div key={key} style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+      <iframe
+        src={block.url}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+        allowFullScreen
+        title="Embedded media"
+      />
+    </div>
   );
 }
 

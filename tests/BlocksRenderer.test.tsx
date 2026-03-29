@@ -129,7 +129,6 @@ describe('BlocksRenderer', () => {
       },
     ];
     render(<BlocksRenderer content={content} />);
-    // backgroundColor wraps color wraps text
     const bgEl = screen.getByText('Both').closest('span[style*="background-color"]');
     expect(bgEl).toBeInTheDocument();
     const colorEl = screen.getByText('Both').closest('span[style*="color"]');
@@ -146,7 +145,6 @@ describe('BlocksRenderer', () => {
     render(<BlocksRenderer content={content} />);
     const strong = screen.getByText('BoldRed');
     expect(strong.tagName).toBe('STRONG');
-    // color span wraps the strong
     const colorSpan = strong.closest('span[style*="color"]');
     expect(colorSpan).toBeInTheDocument();
   });
@@ -169,6 +167,45 @@ describe('BlocksRenderer', () => {
     render(<BlocksRenderer content={content} />);
     const link = screen.getByText('Click me');
     expect(link.closest('a')).toHaveAttribute('href', 'https://example.com');
+  });
+
+  it('renders links with target="_blank" and rel', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            type: 'link',
+            url: 'https://example.com',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            children: [{ type: 'text', text: 'External' }],
+          },
+        ],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    const a = screen.getByText('External').closest('a');
+    expect(a).toHaveAttribute('target', '_blank');
+    expect(a).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('does not set target when not provided', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            type: 'link',
+            url: 'https://example.com',
+            children: [{ type: 'text', text: 'Normal' }],
+          },
+        ],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    const a = screen.getByText('Normal').closest('a');
+    expect(a).not.toHaveAttribute('target');
   });
 
   // ── Lists ────────────────────────────────────────────────────────
@@ -297,7 +334,6 @@ describe('BlocksRenderer', () => {
       },
     ];
     const { container } = render(<BlocksRenderer content={content} />);
-    // indentLevel 3 % 3 = 0 → disc (cycles back)
     expect(container.querySelector('ul')).toHaveStyle({ listStyleType: 'disc' });
   });
 
@@ -333,6 +369,56 @@ describe('BlocksRenderer', () => {
     const { container } = render(<BlocksRenderer content={content} />);
     expect(container.querySelector('ul')).toHaveStyle({ listStyleType: 'disc' });
     expect(container.querySelector('ol')).toHaveStyle({ listStyleType: 'lower-alpha' });
+  });
+
+  // ── To-do Lists ──────────────────────────────────────────────────
+
+  it('renders to-do list with checkboxes', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'todo',
+        children: [
+          { type: 'list-item', checked: false, children: [{ type: 'text', text: 'Unchecked' }] },
+          { type: 'list-item', checked: true, children: [{ type: 'text', text: 'Checked' }] },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes).toHaveLength(2);
+    expect(checkboxes[0]).not.toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+  });
+
+  it('applies strikethrough and opacity to checked to-do items', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'todo',
+        children: [
+          { type: 'list-item', checked: true, children: [{ type: 'text', text: 'Done' }] },
+        ],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    const span = screen.getByText('Done');
+    expect(span).toHaveStyle({ textDecoration: 'line-through', opacity: 0.6 });
+  });
+
+  it('renders to-do list without bullet markers', () => {
+    const content: BlocksContent = [
+      {
+        type: 'list',
+        format: 'todo',
+        children: [
+          { type: 'list-item', checked: false, children: [{ type: 'text', text: 'Task' }] },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const ul = container.querySelector('ul');
+    expect(ul).toHaveStyle({ listStyle: 'none' });
   });
 
   // ── Quote ────────────────────────────────────────────────────────
@@ -377,6 +463,206 @@ describe('BlocksRenderer', () => {
     expect(img).toHaveAttribute('src', 'https://example.com/img.png');
     expect(img).toHaveAttribute('width', '200');
     expect(img).toHaveAttribute('height', '100');
+  });
+
+  it('renders image with caption', () => {
+    const content: BlocksContent = [
+      {
+        type: 'image',
+        image: { url: 'https://example.com/img.png', alternativeText: 'Photo' },
+        caption: 'A beautiful photo',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('A beautiful photo').tagName).toBe('FIGCAPTION');
+  });
+
+  it('does not render figcaption when caption is empty', () => {
+    const content: BlocksContent = [
+      {
+        type: 'image',
+        image: { url: 'https://example.com/img.png', alternativeText: 'Photo' },
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('figcaption')).toBeNull();
+  });
+
+  it('renders image inside a figure element', () => {
+    const content: BlocksContent = [
+      {
+        type: 'image',
+        image: { url: 'https://example.com/img.png', alternativeText: 'Photo' },
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('figure')).toBeInTheDocument();
+  });
+
+  it('renders image with alignment', () => {
+    const content: BlocksContent = [
+      {
+        type: 'image',
+        image: { url: 'https://example.com/img.png', alternativeText: 'Photo' },
+        imageAlign: 'left',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('figure')).toHaveStyle({ textAlign: 'left' });
+  });
+
+  it('defaults image alignment to center', () => {
+    const content: BlocksContent = [
+      {
+        type: 'image',
+        image: { url: 'https://example.com/img.png', alternativeText: 'Photo' },
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('figure')).toHaveStyle({ textAlign: 'center' });
+  });
+
+  // ── Horizontal Line ──────────────────────────────────────────────
+
+  it('renders horizontal line', () => {
+    const content: BlocksContent = [
+      { type: 'horizontal-line', children: [{ type: 'text', text: '' }] },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('hr')).toBeInTheDocument();
+  });
+
+  // ── Text Alignment ───────────────────────────────────────────────
+
+  it('renders paragraph with text alignment', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        textAlign: 'center',
+        children: [{ type: 'text', text: 'Centered' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Centered').closest('p')).toHaveStyle({ textAlign: 'center' });
+  });
+
+  it('renders heading with text alignment', () => {
+    const content: BlocksContent = [
+      {
+        type: 'heading',
+        level: 2,
+        textAlign: 'right',
+        children: [{ type: 'text', text: 'Right H2' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Right H2')).toHaveStyle({ textAlign: 'right' });
+  });
+
+  it('renders blockquote with text alignment', () => {
+    const content: BlocksContent = [
+      {
+        type: 'quote',
+        textAlign: 'center',
+        children: [{ type: 'text', text: 'Centered quote' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Centered quote').closest('blockquote')).toHaveStyle({
+      textAlign: 'center',
+    });
+  });
+
+  it('does not apply textAlign style when not set', () => {
+    const content: BlocksContent = [
+      { type: 'paragraph', children: [{ type: 'text', text: 'Default' }] },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('p')?.getAttribute('style')).toBeNull();
+  });
+
+  // ── Tables ───────────────────────────────────────────────────────
+
+  it('renders a table with header and data cells', () => {
+    const content: BlocksContent = [
+      {
+        type: 'table',
+        children: [
+          {
+            type: 'table-row',
+            children: [
+              { type: 'table-header-cell', children: [{ type: 'text', text: 'Name' }] },
+              { type: 'table-header-cell', children: [{ type: 'text', text: 'Age' }] },
+            ],
+          },
+          {
+            type: 'table-row',
+            children: [
+              { type: 'table-cell', children: [{ type: 'text', text: 'Alice' }] },
+              { type: 'table-cell', children: [{ type: 'text', text: '30' }] },
+            ],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('table')).toBeInTheDocument();
+    expect(container.querySelectorAll('th')).toHaveLength(2);
+    expect(container.querySelectorAll('td')).toHaveLength(2);
+    expect(screen.getByText('Name').tagName).toBe('TH');
+    expect(screen.getByText('Alice').tagName).toBe('TD');
+  });
+
+  it('renders table within tbody', () => {
+    const content: BlocksContent = [
+      {
+        type: 'table',
+        children: [
+          {
+            type: 'table-row',
+            children: [{ type: 'table-cell', children: [{ type: 'text', text: 'Cell' }] }],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('tbody')).toBeInTheDocument();
+  });
+
+  // ── Media Embed ──────────────────────────────────────────────────
+
+  it('renders media embed as responsive iframe', () => {
+    const content: BlocksContent = [
+      {
+        type: 'media-embed',
+        url: 'https://www.youtube.com/embed/abc123',
+        originalUrl: 'https://www.youtube.com/watch?v=abc123',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const iframe = container.querySelector('iframe');
+    expect(iframe).toBeInTheDocument();
+    expect(iframe).toHaveAttribute('src', 'https://www.youtube.com/embed/abc123');
+    expect(iframe).toHaveAttribute('allowfullscreen', '');
+  });
+
+  it('renders media embed wrapper with 16:9 aspect ratio', () => {
+    const content: BlocksContent = [
+      {
+        type: 'media-embed',
+        url: 'https://player.vimeo.com/video/12345',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const wrapper = container.querySelector('div');
+    expect(wrapper).toHaveStyle({ position: 'relative', paddingBottom: '56.25%', height: '0' });
   });
 
   // ── Custom Block Renderers ───────────────────────────────────────
@@ -438,6 +724,101 @@ describe('BlocksRenderer', () => {
       />
     );
     expect(screen.getByTestId('custom-link')).toHaveAttribute('href', 'https://example.com');
+  });
+
+  it('uses custom horizontal-line renderer', () => {
+    const content: BlocksContent = [
+      { type: 'horizontal-line', children: [{ type: 'text', text: '' }] },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          'horizontal-line': () => <div data-testid="custom-hr" />,
+        }}
+      />
+    );
+    expect(screen.getByTestId('custom-hr')).toBeInTheDocument();
+  });
+
+  it('uses custom media-embed renderer', () => {
+    const content: BlocksContent = [
+      {
+        type: 'media-embed',
+        url: 'https://www.youtube.com/embed/abc',
+        originalUrl: 'https://www.youtube.com/watch?v=abc',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          'media-embed': ({ url }) => <div data-testid="custom-embed">{url}</div>,
+        }}
+      />
+    );
+    expect(screen.getByTestId('custom-embed')).toBeInTheDocument();
+  });
+
+  it('uses custom table renderers', () => {
+    const content: BlocksContent = [
+      {
+        type: 'table',
+        children: [
+          {
+            type: 'table-row',
+            children: [{ type: 'table-header-cell', children: [{ type: 'text', text: 'Header' }] }],
+          },
+          {
+            type: 'table-row',
+            children: [{ type: 'table-cell', children: [{ type: 'text', text: 'Data' }] }],
+          },
+        ],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          table: ({ children }) => <div data-testid="custom-table">{children}</div>,
+          'table-row': ({ children }) => <div data-testid="custom-row">{children}</div>,
+          'table-header-cell': ({ children }) => <div data-testid="custom-th">{children}</div>,
+          'table-cell': ({ children }) => <div data-testid="custom-td">{children}</div>,
+        }}
+      />
+    );
+    expect(screen.getByTestId('custom-table')).toBeInTheDocument();
+    expect(screen.getAllByTestId('custom-row')).toHaveLength(2);
+    expect(screen.getByTestId('custom-th')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-td')).toBeInTheDocument();
+  });
+
+  it('uses custom image renderer with caption and alignment', () => {
+    const content: BlocksContent = [
+      {
+        type: 'image',
+        image: { url: 'https://example.com/img.png', alternativeText: 'Photo' },
+        caption: 'My caption',
+        imageAlign: 'right',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          image: ({ image, caption, imageAlign }) => (
+            <div data-testid="custom-img" data-caption={caption} data-align={imageAlign}>
+              <img src={image.url} alt={image.alternativeText || ''} />
+            </div>
+          ),
+        }}
+      />
+    );
+    const el = screen.getByTestId('custom-img');
+    expect(el).toHaveAttribute('data-caption', 'My caption');
+    expect(el).toHaveAttribute('data-align', 'right');
   });
 
   // ── Custom Modifier Renderers ────────────────────────────────────
