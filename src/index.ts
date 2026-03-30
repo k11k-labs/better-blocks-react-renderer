@@ -26,5 +26,7 @@ export type {
   ModifierProps,
   ColorModifierProps,
   BackgroundColorModifierProps,
+  FontFamilyModifierProps,
+  FontSizeModifierProps,
   BlockComponentProps,
 } from './types';

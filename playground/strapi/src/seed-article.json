@@ -42,6 +42,55 @@
       ]
     },
     {
+      "type": "paragraph",
+      "children": [
+        { "type": "text", "text": "UPPERCASE", "uppercase": true },
+        { "type": "text", "text": " · " },
+        { "type": "text", "text": "E=mc", "bold": true },
+        { "type": "text", "text": "2", "superscript": true },
+        { "type": "text", "text": " · H" },
+        { "type": "text", "text": "2", "subscript": true },
+        { "type": "text", "text": "O" }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Font Family & Size" }]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        { "type": "text", "text": "Georgia serif", "fontFamily": "Georgia, serif" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "text": "Courier mono", "fontFamily": "Courier New, monospace" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "text": "Small text", "fontSize": "12px" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "text": "Large text", "fontSize": "24px" }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Line Height & Indent" }]
+    },
+    {
+      "type": "paragraph",
+      "lineHeight": "2.0",
+      "children": [{ "type": "text", "text": "This paragraph has double line height (2.0). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore." }]
+    },
+    {
+      "type": "paragraph",
+      "indent": 1,
+      "children": [{ "type": "text", "text": "This paragraph is indented one level (2rem)." }]
+    },
+    {
+      "type": "paragraph",
+      "indent": 2,
+      "children": [{ "type": "text", "text": "This paragraph is indented two levels (4rem)." }]
+    },
+    {
       "type": "heading",
       "level": 2,
       "children": [{ "type": "text", "text": "Better Blocks: Color & Highlight", "color": "#7C3AED" }]

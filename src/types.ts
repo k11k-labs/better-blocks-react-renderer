@@ -10,8 +10,13 @@ export type TextNode = {
   underline?: boolean;
   strikethrough?: boolean;
   code?: boolean;
+  uppercase?: boolean;
+  superscript?: boolean;
+  subscript?: boolean;
   color?: string;
   backgroundColor?: string;
+  fontFamily?: string;
+  fontSize?: string;
 };
 
 export type LinkNode = {
@@ -39,6 +44,8 @@ export type ListItemNode = {
 export type ParagraphNode = {
   type: 'paragraph';
   textAlign?: TextAlign;
+  lineHeight?: string;
+  indent?: number;
   children: InlineNode[];
 };
 
@@ -46,6 +53,8 @@ export type HeadingNode = {
   type: 'heading';
   level: 1 | 2 | 3 | 4 | 5 | 6;
   textAlign?: TextAlign;
+  lineHeight?: string;
+  indent?: number;
   children: InlineNode[];
 };
 
@@ -59,6 +68,8 @@ export type ListNode = {
 export type QuoteNode = {
   type: 'quote';
   textAlign?: TextAlign;
+  lineHeight?: string;
+  indent?: number;
   children: InlineNode[];
 };
 
@@ -175,14 +186,29 @@ export type CustomBlocksConfig = Partial<{
   'media-embed': ComponentType<{ url: string; originalUrl?: string }>;
 }>;
 
+export type FontFamilyModifierProps = {
+  children: ReactNode;
+  fontFamily: string;
+};
+
+export type FontSizeModifierProps = {
+  children: ReactNode;
+  fontSize: string;
+};
+
 export type CustomModifiersConfig = Partial<{
   bold: ComponentType<ModifierProps>;
   italic: ComponentType<ModifierProps>;
   underline: ComponentType<ModifierProps>;
   strikethrough: ComponentType<ModifierProps>;
   code: ComponentType<ModifierProps>;
+  uppercase: ComponentType<ModifierProps>;
+  superscript: ComponentType<ModifierProps>;
+  subscript: ComponentType<ModifierProps>;
   color: ComponentType<ColorModifierProps>;
   backgroundColor: ComponentType<BackgroundColorModifierProps>;
+  fontFamily: ComponentType<FontFamilyModifierProps>;
+  fontSize: ComponentType<FontSizeModifierProps>;
 }>;
 
 // ── Component Props ──────────────────────────────────────────────────

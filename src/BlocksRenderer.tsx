@@ -22,7 +22,21 @@ import type {
 // ── Text / Modifier Rendering ────────────────────────────────────────
 
 function renderTextNode(node: TextNode, key: number, modifiers?: CustomModifiersConfig): ReactNode {
-  const { text, bold, italic, underline, strikethrough, code, color, backgroundColor } = node;
+  const {
+    text,
+    bold,
+    italic,
+    underline,
+    strikethrough,
+    code,
+    uppercase,
+    superscript,
+    subscript,
+    color,
+    backgroundColor,
+    fontFamily,
+    fontSize,
+  } = node;
 
   let content: ReactNode = text;
 
@@ -30,6 +44,16 @@ function renderTextNode(node: TextNode, key: number, modifiers?: CustomModifiers
   if (code) {
     const Comp = modifiers?.code;
     content = Comp ? <Comp>{content}</Comp> : <code>{content}</code>;
+  }
+
+  if (subscript) {
+    const Comp = modifiers?.subscript;
+    content = Comp ? <Comp>{content}</Comp> : <sub>{content}</sub>;
+  }
+
+  if (superscript) {
+    const Comp = modifiers?.superscript;
+    content = Comp ? <Comp>{content}</Comp> : <sup>{content}</sup>;
   }
 
   if (strikethrough) {
@@ -43,6 +67,15 @@ function renderTextNode(node: TextNode, key: number, modifiers?: CustomModifiers
       <Comp>{content}</Comp>
     ) : (
       <span style={{ textDecoration: 'underline' }}>{content}</span>
+    );
+  }
+
+  if (uppercase) {
+    const Comp = modifiers?.uppercase;
+    content = Comp ? (
+      <Comp>{content}</Comp>
+    ) : (
+      <span style={{ textTransform: 'uppercase' }}>{content}</span>
     );
   }
 
@@ -71,6 +104,24 @@ function renderTextNode(node: TextNode, key: number, modifiers?: CustomModifiers
       <Comp backgroundColor={backgroundColor}>{content}</Comp>
     ) : (
       <span style={{ backgroundColor }}>{content}</span>
+    );
+  }
+
+  if (fontFamily) {
+    const Comp = modifiers?.fontFamily;
+    content = Comp ? (
+      <Comp fontFamily={fontFamily}>{content}</Comp>
+    ) : (
+      <span style={{ fontFamily }}>{content}</span>
+    );
+  }
+
+  if (fontSize) {
+    const Comp = modifiers?.fontSize;
+    content = Comp ? (
+      <Comp fontSize={fontSize}>{content}</Comp>
+    ) : (
+      <span style={{ fontSize }}>{content}</span>
     );
   }
 
@@ -280,6 +331,18 @@ function renderBlock(
   }
 }
 
+function getBlockStyle(block: {
+  textAlign?: string;
+  lineHeight?: string;
+  indent?: number;
+}): CSSProperties | undefined {
+  const style: CSSProperties = {};
+  if (block.textAlign) style.textAlign = block.textAlign as CSSProperties['textAlign'];
+  if (block.lineHeight) style.lineHeight = block.lineHeight;
+  if (block.indent) style.marginLeft = `${block.indent * 2}rem`;
+  return Object.keys(style).length > 0 ? style : undefined;
+}
+
 function renderParagraph(
   block: ParagraphNode,
   key: number,
@@ -288,9 +351,7 @@ function renderParagraph(
 ): ReactNode {
   const ParagraphComp = blocks?.paragraph;
   const children = renderInlineContent(block.children, blocks, modifiers);
-  const style: CSSProperties | undefined = block.textAlign
-    ? { textAlign: block.textAlign }
-    : undefined;
+  const style = getBlockStyle(block);
 
   return ParagraphComp ? (
     <ParagraphComp key={key} style={style}>
@@ -311,9 +372,7 @@ function renderHeading(
 ): ReactNode {
   const HeadingComp = blocks?.heading;
   const children = renderInlineContent(block.children, blocks, modifiers);
-  const style: CSSProperties | undefined = block.textAlign
-    ? { textAlign: block.textAlign }
-    : undefined;
+  const style = getBlockStyle(block);
 
   if (HeadingComp) {
     return (
@@ -339,9 +398,7 @@ function renderQuote(
 ): ReactNode {
   const QuoteComp = blocks?.quote;
   const children = renderInlineContent(block.children, blocks, modifiers);
-  const style: CSSProperties | undefined = block.textAlign
-    ? { textAlign: block.textAlign }
-    : undefined;
+  const style = getBlockStyle(block);
 
   return QuoteComp ? (
     <QuoteComp key={key} style={style}>
