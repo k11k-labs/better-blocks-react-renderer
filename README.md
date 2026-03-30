@@ -68,7 +68,7 @@ import { BlocksRenderer } from '@k11k/better-blocks-react-renderer';
 <BlocksRenderer content={blocks} />;
 ```
 
-That's it. Colors and highlights work automatically.
+That's it. All Better Blocks features &mdash; colors, tables, to-do lists, media embeds, alignment, and more &mdash; work automatically.
 
 ## Supported Blocks
 
@@ -91,6 +91,8 @@ That's it. Colors and highlights work automatically.
 | Property      | Applies to                | Description                                           |
 | ------------- | ------------------------- | ----------------------------------------------------- |
 | `textAlign`   | paragraph, heading, quote | Text alignment (`left`, `center`, `right`, `justify`) |
+| `lineHeight`  | paragraph, heading, quote | CSS line-height value (e.g. `1.5`, `2.0`)             |
+| `indent`      | paragraph, heading, quote | Block indentation level (`marginLeft: N * 2rem`)      |
 | `indentLevel` | list                      | Cycling list-style-type per nesting depth             |
 | `format`      | list                      | `ordered`, `unordered`, or `todo`                     |
 | `checked`     | list-item (in todo lists) | Checkbox state (`true`/`false`)                       |
@@ -110,8 +112,13 @@ That's it. Colors and highlights work automatically.
 | `underline`       | `<span>`                           | Strapi core   |
 | `strikethrough`   | `<del>`                            | Strapi core   |
 | `code`            | `<code>`                           | Strapi core   |
+| `uppercase`       | `<span style={{textTransform}}>`   | Better Blocks |
+| `superscript`     | `<sup>`                            | Better Blocks |
+| `subscript`       | `<sub>`                            | Better Blocks |
 | `color`           | `<span style={{color}}>`           | Better Blocks |
 | `backgroundColor` | `<span style={{backgroundColor}}>` | Better Blocks |
+| `fontFamily`      | `<span style={{fontFamily}}>`      | Better Blocks |
+| `fontSize`        | `<span style={{fontSize}}>`        | Better Blocks |
 
 ## Custom Renderers
 
@@ -263,8 +270,8 @@ yarn lint        # Check formatting
 
 ## Related
 
-- [@k11k/strapi-plugin-better-blocks](https://github.com/k11k-labs/strapi-plugin-better-blocks) &mdash; Strapi plugin that adds color & highlight marks to the Blocks editor
-- [@strapi/blocks-react-renderer](https://github.com/strapi/blocks-react-renderer) &mdash; Official Strapi renderer (no color/highlight support)
+- [@k11k/strapi-plugin-better-blocks](https://github.com/k11k-labs/strapi-plugin-better-blocks) &mdash; Strapi plugin that extends the Blocks editor with colors, tables, to-do lists, media embeds, and more
+- [@strapi/blocks-react-renderer](https://github.com/strapi/blocks-react-renderer) &mdash; Official Strapi renderer (standard blocks only)
 
 ## License
 

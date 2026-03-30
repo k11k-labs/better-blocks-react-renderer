@@ -665,6 +665,127 @@ describe('BlocksRenderer', () => {
     expect(wrapper).toHaveStyle({ position: 'relative', paddingBottom: '56.25%', height: '0' });
   });
 
+  // ── Text Modifiers: uppercase, superscript, subscript ────────────
+
+  it('renders uppercase text', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'upper', uppercase: true }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('upper')).toHaveStyle({ textTransform: 'uppercase' });
+  });
+
+  it('renders superscript text', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: '2', superscript: true }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('2').tagName).toBe('SUP');
+  });
+
+  it('renders subscript text', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'n', subscript: true }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('n').tagName).toBe('SUB');
+  });
+
+  // ── Text Marks: fontFamily, fontSize ─────────────────────────────
+
+  it('renders text with fontFamily', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'Serif', fontFamily: 'Georgia, serif' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Serif')).toHaveStyle({ fontFamily: 'Georgia, serif' });
+  });
+
+  it('renders text with fontSize', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'Big', fontSize: '24px' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Big')).toHaveStyle({ fontSize: '24px' });
+  });
+
+  // ── Block Properties: lineHeight, indent ─────────────────────────
+
+  it('renders paragraph with lineHeight', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        lineHeight: '1.8',
+        children: [{ type: 'text', text: 'Spaced' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Spaced').closest('p')).toHaveStyle({ lineHeight: '1.8' });
+  });
+
+  it('renders heading with lineHeight', () => {
+    const content: BlocksContent = [
+      {
+        type: 'heading',
+        level: 2,
+        lineHeight: '2.0',
+        children: [{ type: 'text', text: 'Spaced H2' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Spaced H2')).toHaveStyle({ lineHeight: '2.0' });
+  });
+
+  it('renders paragraph with indent', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        indent: 2,
+        children: [{ type: 'text', text: 'Indented' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    expect(screen.getByText('Indented').closest('p')).toHaveStyle({ marginLeft: '4rem' });
+  });
+
+  it('renders block with combined textAlign, lineHeight, and indent', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        textAlign: 'center',
+        lineHeight: '1.5',
+        indent: 1,
+        children: [{ type: 'text', text: 'Combined' }],
+      },
+    ];
+    render(<BlocksRenderer content={content} />);
+    const p = screen.getByText('Combined').closest('p');
+    expect(p).toHaveStyle({ textAlign: 'center', lineHeight: '1.5', marginLeft: '2rem' });
+  });
+
+  it('does not apply lineHeight or indent when not set', () => {
+    const content: BlocksContent = [
+      { type: 'paragraph', children: [{ type: 'text', text: 'Plain' }] },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('p')?.getAttribute('style')).toBeNull();
+  });
+
   // ── Custom Block Renderers ───────────────────────────────────────
 
   it('uses custom paragraph renderer', () => {
