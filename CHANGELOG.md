@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.4.0
+
+### Minor Changes
+
+- [#9](https://github.com/k11k-labs/better-blocks-react-renderer/pull/9) [`c8de109`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/c8de1095dd051d18d18501ca3f0825228a5be5b3) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for Better Blocks plugin v0.5.0-v0.6.0 features: uppercase, superscript, subscript modifiers, font family and size marks, line height and block indent properties
+
 ## 0.3.0
 
 ### Minor Changes
