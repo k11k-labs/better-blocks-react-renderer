@@ -22,6 +22,8 @@ export type {
   MediaEmbedNode,
   MathNode,
   DiagramNode,
+  CalloutNode,
+  CalloutVariant,
   TextAlign,
   CustomBlocksConfig,
   CustomModifiersConfig,

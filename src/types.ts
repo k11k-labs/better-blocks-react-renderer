@@ -137,6 +137,15 @@ export type DiagramNode = {
   children: [{ type: 'text'; text: '' }];
 };
 
+export type CalloutVariant = 'note' | 'tip' | 'important' | 'warning' | 'caution';
+
+export type CalloutNode = {
+  type: 'callout';
+  variant: CalloutVariant;
+  title?: string;
+  children: BlockNode[];
+};
+
 export type BlockNode =
   | ParagraphNode
   | HeadingNode
@@ -148,7 +157,8 @@ export type BlockNode =
   | TableNode
   | MediaEmbedNode
   | MathNode
-  | DiagramNode;
+  | DiagramNode
+  | CalloutNode;
 
 export type BlocksContent = BlockNode[];
 
@@ -202,6 +212,7 @@ export type CustomBlocksConfig = Partial<{
   'media-embed': ComponentType<{ url: string; originalUrl?: string }>;
   math: ComponentType<{ formula: string; inline: boolean }>;
   diagram: ComponentType<{ code: string; format: 'mermaid' }>;
+  callout: ComponentType<BlockComponentProps<{ variant: CalloutVariant; title?: string }>>;
 }>;
 
 export type FontFamilyModifierProps = {
