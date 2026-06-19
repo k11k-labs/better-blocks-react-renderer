@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.7.0
+
+### Minor Changes
+
+- [#19](https://github.com/k11k-labs/better-blocks-react-renderer/pull/19) [`4bb5d32`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/4bb5d32f3d6c353733d904de13c3dc9dc88e9453) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for `callout` (admonition) nodes from the Better Blocks plugin (`{ type: 'callout', variant, title?, children }`). Callouts render GitHub-style in five variants — note, tip, important, warning, caution — as an `<aside role="note">` with a colored left border, a title row (icon + label, or the node's custom `title`), and the nested block children rendered recursively. Colors are inlined so no stylesheet is required. The block can be overridden with a custom `callout` renderer that receives `variant`, `title`, and `children`.
+
 ## 0.6.0
 
 ### Minor Changes
