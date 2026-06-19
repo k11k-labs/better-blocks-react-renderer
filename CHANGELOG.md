@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.6.0
+
+### Minor Changes
+
+- [#17](https://github.com/k11k-labs/better-blocks-react-renderer/pull/17) [`f2ca6ba`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/f2ca6ba5118b4f5a8cb4ffea5ffbaa36c0d4cecc) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for block-level Mermaid `diagram` nodes from the Better Blocks plugin (`{ type: 'diagram', format: 'mermaid', value }`). Diagrams render to inline SVG on the client using a lazy-loaded `mermaid` instance. SSR and the first client render emit the raw Mermaid source in a `<pre>` (so hydration matches), then swap in the rendered SVG after mount; if Mermaid fails to parse the source, the raw text remains as a graceful fallback. The block can be overridden with a custom `diagram` renderer that receives `code` and `format` props.
+
 ## 0.5.1
 
 ### Patch Changes
