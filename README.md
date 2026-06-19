@@ -12,6 +12,9 @@
   <a href="https://github.com/k11k-labs/better-blocks-react-renderer/blob/main/LICENSE">
     <img alt="license" src="https://img.shields.io/npm/l/@k11k/better-blocks-react-renderer.svg" />
   </a>
+  <a href="https://buymeacoffee.com/k11k">
+    <img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black" />
+  </a>
 </p>
 
 <p align="center">
@@ -31,7 +34,8 @@
 7. [Custom Renderers](#custom-renderers)
 8. [TypeScript](#typescript)
 9. [Contributing](#contributing)
-10. [License](#license)
+10. [Support this project](#support-this-project)
+11. [License](#license)
 
 ---
 
@@ -316,6 +320,16 @@ yarn lint        # Check formatting
 ## Community & Support
 
 - [GitHub Issues](https://github.com/k11k-labs/better-blocks-react-renderer/issues) &mdash; Bug reports and feature requests
+
+## Support this project
+
+This package is built and maintained in my free time, and it's free for everyone. If it has saved you time on a project, you can help keep it caffeinated and actively developed:
+
+<a href="https://buymeacoffee.com/k11k">
+  <img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black&style=for-the-badge" />
+</a>
+
+Every coffee goes toward fixing bugs, reviewing PRs, writing docs, and shipping the features you ask for. Thank you! &#9749;
 
 ## Related
 
