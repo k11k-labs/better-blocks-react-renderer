@@ -34,7 +34,8 @@
     "*.{js,jsx,ts,tsx,json,md,yml,yaml,css}": "prettier --write"
   },
   "dependencies": {
-    "katex": "^0.16.11"
+    "katex": "^0.16.11",
+    "mermaid": "^11.4.0"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
@@ -75,6 +76,8 @@
     "katex",
     "latex",
     "math",
+    "mermaid",
+    "diagram",
     "cms",
     "headless-cms"
   ],

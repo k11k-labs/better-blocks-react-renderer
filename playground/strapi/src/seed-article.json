@@ -3,404 +3,795 @@
     {
       "type": "heading",
       "level": 1,
-      "children": [{ "type": "text", "text": "Better Blocks Renderer — Feature Showcase" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Better Blocks Renderer — Feature Showcase"
+        }
+      ]
     },
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "This article demonstrates " },
-        { "type": "text", "text": "every feature", "bold": true },
-        { "type": "text", "text": " supported by the renderer." }
+        {
+          "type": "text",
+          "text": "This article demonstrates "
+        },
+        {
+          "type": "text",
+          "text": "every feature",
+          "bold": true
+        },
+        {
+          "type": "text",
+          "text": " supported by the renderer."
+        }
       ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Standard Text Modifiers" }]
-    },
-    {
-      "type": "paragraph",
       "children": [
-        { "type": "text", "text": "Bold text", "bold": true },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Italic text", "italic": true },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Underlined text", "underline": true },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Strikethrough text", "strikethrough": true },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Inline code", "code": true }
+        {
+          "type": "text",
+          "text": "Standard Text Modifiers"
+        }
       ]
     },
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "Combined: ", "bold": true, "italic": true },
-        { "type": "text", "text": "bold + italic + underline", "bold": true, "italic": true, "underline": true },
-        { "type": "text", "text": " and " },
-        { "type": "text", "text": "bold + strikethrough", "bold": true, "strikethrough": true }
+        {
+          "type": "text",
+          "text": "Bold text",
+          "bold": true
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Italic text",
+          "italic": true
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Underlined text",
+          "underline": true
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Strikethrough text",
+          "strikethrough": true
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Inline code",
+          "code": true
+        }
       ]
     },
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "UPPERCASE", "uppercase": true },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "E=mc", "bold": true },
-        { "type": "text", "text": "2", "superscript": true },
-        { "type": "text", "text": " · H" },
-        { "type": "text", "text": "2", "subscript": true },
-        { "type": "text", "text": "O" }
+        {
+          "type": "text",
+          "text": "Combined: ",
+          "bold": true,
+          "italic": true
+        },
+        {
+          "type": "text",
+          "text": "bold + italic + underline",
+          "bold": true,
+          "italic": true,
+          "underline": true
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "bold + strikethrough",
+          "bold": true,
+          "strikethrough": true
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "UPPERCASE",
+          "uppercase": true
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "E=mc",
+          "bold": true
+        },
+        {
+          "type": "text",
+          "text": "2",
+          "superscript": true
+        },
+        {
+          "type": "text",
+          "text": " · H"
+        },
+        {
+          "type": "text",
+          "text": "2",
+          "subscript": true
+        },
+        {
+          "type": "text",
+          "text": "O"
+        }
       ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Font Family & Size" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Font Family & Size"
+        }
+      ]
     },
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "Georgia serif", "fontFamily": "Georgia, serif" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Courier mono", "fontFamily": "Courier New, monospace" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Small text", "fontSize": "12px" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Large text", "fontSize": "24px" }
+        {
+          "type": "text",
+          "text": "Georgia serif",
+          "fontFamily": "Georgia, serif"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Courier mono",
+          "fontFamily": "Courier New, monospace"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Small text",
+          "fontSize": "12px"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Large text",
+          "fontSize": "24px"
+        }
       ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Line Height & Indent" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Line Height & Indent"
+        }
+      ]
     },
     {
       "type": "paragraph",
       "lineHeight": "2.0",
-      "children": [{ "type": "text", "text": "This paragraph has double line height (2.0). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore." }]
+      "children": [
+        {
+          "type": "text",
+          "text": "This paragraph has double line height (2.0). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore."
+        }
+      ]
     },
     {
       "type": "paragraph",
       "indent": 1,
-      "children": [{ "type": "text", "text": "This paragraph is indented one level (2rem)." }]
+      "children": [
+        {
+          "type": "text",
+          "text": "This paragraph is indented one level (2rem)."
+        }
+      ]
     },
     {
       "type": "paragraph",
       "indent": 2,
-      "children": [{ "type": "text", "text": "This paragraph is indented two levels (4rem)." }]
-    },
-    {
-      "type": "heading",
-      "level": 2,
-      "children": [{ "type": "text", "text": "Better Blocks: Color & Highlight", "color": "#7C3AED" }]
-    },
-    {
-      "type": "paragraph",
       "children": [
-        { "type": "text", "text": "Red text", "color": "#E53E3E" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Blue text", "color": "#3182CE" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Green text", "color": "#38A169" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Purple text", "color": "#7C3AED" }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "children": [
-        { "type": "text", "text": "Yellow highlight", "backgroundColor": "#FEFCBF" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Pink highlight", "backgroundColor": "#FED7D7" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Blue highlight", "backgroundColor": "#BEE3F8" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Green highlight", "backgroundColor": "#C6F6D5" }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "children": [
-        { "type": "text", "text": "Red on yellow", "color": "#E53E3E", "backgroundColor": "#FEFCBF" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Bold blue on pink", "bold": true, "color": "#3182CE", "backgroundColor": "#FED7D7" },
-        { "type": "text", "text": " · " },
-        { "type": "text", "text": "Italic green on blue", "italic": true, "color": "#38A169", "backgroundColor": "#BEE3F8" }
+        {
+          "type": "text",
+          "text": "This paragraph is indented two levels (4rem)."
+        }
       ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Text Alignment" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Better Blocks: Color & Highlight",
+          "color": "#7C3AED"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Red text",
+          "color": "#E53E3E"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Blue text",
+          "color": "#3182CE"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Green text",
+          "color": "#38A169"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Purple text",
+          "color": "#7C3AED"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Yellow highlight",
+          "backgroundColor": "#FEFCBF"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Pink highlight",
+          "backgroundColor": "#FED7D7"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Blue highlight",
+          "backgroundColor": "#BEE3F8"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Green highlight",
+          "backgroundColor": "#C6F6D5"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Red on yellow",
+          "color": "#E53E3E",
+          "backgroundColor": "#FEFCBF"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Bold blue on pink",
+          "bold": true,
+          "color": "#3182CE",
+          "backgroundColor": "#FED7D7"
+        },
+        {
+          "type": "text",
+          "text": " · "
+        },
+        {
+          "type": "text",
+          "text": "Italic green on blue",
+          "italic": true,
+          "color": "#38A169",
+          "backgroundColor": "#BEE3F8"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [
+        {
+          "type": "text",
+          "text": "Text Alignment"
+        }
+      ]
     },
     {
       "type": "paragraph",
       "textAlign": "left",
-      "children": [{ "type": "text", "text": "Left-aligned paragraph (default)." }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Left-aligned paragraph (default)."
+        }
+      ]
     },
     {
       "type": "paragraph",
       "textAlign": "center",
-      "children": [{ "type": "text", "text": "Center-aligned paragraph." }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Center-aligned paragraph."
+        }
+      ]
     },
     {
       "type": "paragraph",
       "textAlign": "right",
-      "children": [{ "type": "text", "text": "Right-aligned paragraph." }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Right-aligned paragraph."
+        }
+      ]
     },
     {
       "type": "paragraph",
       "textAlign": "justify",
-      "children": [{ "type": "text", "text": "Justified paragraph. This text is longer to demonstrate how justify alignment distributes spacing evenly across the full width of the container." }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Justified paragraph. This text is longer to demonstrate how justify alignment distributes spacing evenly across the full width of the container."
+        }
+      ]
     },
     {
       "type": "heading",
       "level": 3,
       "textAlign": "center",
-      "children": [{ "type": "text", "text": "Centered Heading" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Centered Heading"
+        }
+      ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Horizontal Line" }]
-    },
-    {
-      "type": "paragraph",
-      "children": [{ "type": "text", "text": "Content above the line." }]
-    },
-    {
-      "type": "horizontal-line",
-      "children": [{ "type": "text", "text": "" }]
-    },
-    {
-      "type": "paragraph",
-      "children": [{ "type": "text", "text": "Content below the line." }]
-    },
-    {
-      "type": "heading",
-      "level": 2,
-      "children": [{ "type": "text", "text": "Links" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Horizontal Line"
+        }
+      ]
     },
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "Check out " },
+        {
+          "type": "text",
+          "text": "Content above the line."
+        }
+      ]
+    },
+    {
+      "type": "horizontal-line",
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Content below the line."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [
+        {
+          "type": "text",
+          "text": "Links"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Check out "
+        },
         {
           "type": "link",
           "url": "https://github.com/k11k-labs/better-blocks-react-renderer",
-          "children": [{ "type": "text", "text": "the repo on GitHub" }]
+          "children": [
+            {
+              "type": "text",
+              "text": "the repo on GitHub"
+            }
+          ]
         },
-        { "type": "text", "text": " and " },
+        {
+          "type": "text",
+          "text": " and "
+        },
         {
           "type": "link",
           "url": "https://github.com/k11k-labs/strapi-plugin-better-blocks",
           "target": "_blank",
           "rel": "noopener noreferrer",
-          "children": [{ "type": "text", "text": "the Strapi plugin (opens in new tab)", "bold": true }]
+          "children": [
+            {
+              "type": "text",
+              "text": "the Strapi plugin (opens in new tab)",
+              "bold": true
+            }
+          ]
         },
-        { "type": "text", "text": "." }
+        {
+          "type": "text",
+          "text": "."
+        }
       ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Lists" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Lists"
+        }
+      ]
     },
     {
       "type": "heading",
       "level": 3,
-      "children": [{ "type": "text", "text": "Unordered list" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Unordered list"
+        }
+      ]
     },
     {
       "type": "list",
       "format": "unordered",
       "indentLevel": 0,
       "children": [
-        { "type": "list-item", "children": [{ "type": "text", "text": "First item (disc)" }] },
-        { "type": "list-item", "children": [{ "type": "text", "text": "Second item with " }, { "type": "text", "text": "bold", "bold": true }] },
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "First item (disc)"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Second item with "
+            },
+            {
+              "type": "text",
+              "text": "bold",
+              "bold": true
+            }
+          ]
+        },
         {
           "type": "list",
           "format": "unordered",
           "indentLevel": 1,
           "children": [
-            { "type": "list-item", "children": [{ "type": "text", "text": "Nested item (circle)" }] },
-            { "type": "list-item", "children": [{ "type": "text", "text": "Another nested item", "color": "#E53E3E" }] },
+            {
+              "type": "list-item",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nested item (circle)"
+                }
+              ]
+            },
+            {
+              "type": "list-item",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Another nested item",
+                  "color": "#E53E3E"
+                }
+              ]
+            },
             {
               "type": "list",
               "format": "unordered",
               "indentLevel": 2,
               "children": [
-                { "type": "list-item", "children": [{ "type": "text", "text": "Deep nested item (square)" }] }
+                {
+                  "type": "list-item",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Deep nested item (square)"
+                    }
+                  ]
+                }
               ]
             }
           ]
         },
-        { "type": "list-item", "children": [{ "type": "text", "text": "Third item" }] }
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Third item"
+            }
+          ]
+        }
       ]
     },
     {
       "type": "heading",
       "level": 3,
-      "children": [{ "type": "text", "text": "Ordered list" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Ordered list"
+        }
+      ]
     },
     {
       "type": "list",
       "format": "ordered",
       "indentLevel": 0,
       "children": [
-        { "type": "list-item", "children": [{ "type": "text", "text": "Step one (decimal)" }] },
-        { "type": "list-item", "children": [{ "type": "text", "text": "Step two" }] },
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Step one (decimal)"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Step two"
+            }
+          ]
+        },
         {
           "type": "list",
           "format": "ordered",
           "indentLevel": 1,
           "children": [
-            { "type": "list-item", "children": [{ "type": "text", "text": "Sub-step (lower-alpha)" }] },
+            {
+              "type": "list-item",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Sub-step (lower-alpha)"
+                }
+              ]
+            },
             {
               "type": "list",
               "format": "ordered",
               "indentLevel": 2,
               "children": [
-                { "type": "list-item", "children": [{ "type": "text", "text": "Detail (upper-roman)" }] }
+                {
+                  "type": "list-item",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Detail (upper-roman)"
+                    }
+                  ]
+                }
               ]
             }
           ]
         },
-        { "type": "list-item", "children": [{ "type": "text", "text": "Step three" }] }
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Step three"
+            }
+          ]
+        }
       ]
     },
     {
       "type": "heading",
       "level": 3,
-      "children": [{ "type": "text", "text": "Mixed nested list" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Mixed nested list"
+        }
+      ]
     },
     {
       "type": "list",
       "format": "unordered",
       "indentLevel": 0,
       "children": [
-        { "type": "list-item", "children": [{ "type": "text", "text": "Bullet point" }] },
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Bullet point"
+            }
+          ]
+        },
         {
           "type": "list",
           "format": "ordered",
           "indentLevel": 1,
           "children": [
-            { "type": "list-item", "children": [{ "type": "text", "text": "Numbered inside bullets" }] },
-            { "type": "list-item", "children": [{ "type": "text", "text": "Another numbered item" }] }
+            {
+              "type": "list-item",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Numbered inside bullets"
+                }
+              ]
+            },
+            {
+              "type": "list-item",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Another numbered item"
+                }
+              ]
+            }
           ]
         },
-        { "type": "list-item", "children": [{ "type": "text", "text": "Back to bullets" }] }
+        {
+          "type": "list-item",
+          "children": [
+            {
+              "type": "text",
+              "text": "Back to bullets"
+            }
+          ]
+        }
       ]
     },
     {
       "type": "heading",
       "level": 3,
-      "children": [{ "type": "text", "text": "To-do list" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "To-do list"
+        }
+      ]
     },
     {
       "type": "list",
       "format": "todo",
       "indentLevel": 0,
       "children": [
-        { "type": "list-item", "checked": true, "children": [{ "type": "text", "text": "Set up project" }] },
-        { "type": "list-item", "checked": true, "children": [{ "type": "text", "text": "Implement renderer" }] },
-        { "type": "list-item", "checked": false, "children": [{ "type": "text", "text": "Write documentation" }] },
-        { "type": "list-item", "checked": false, "children": [{ "type": "text", "text": "Publish to npm" }] }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 2,
-      "children": [{ "type": "text", "text": "Blockquote" }]
-    },
-    {
-      "type": "quote",
-      "children": [
-        { "type": "text", "text": "The best way to predict the future is to invent it.", "italic": true },
-        { "type": "text", "text": " — Alan Kay" }
-      ]
-    },
-    {
-      "type": "quote",
-      "textAlign": "center",
-      "children": [
-        { "type": "text", "text": "Centered quote with alignment.", "italic": true }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 2,
-      "children": [{ "type": "text", "text": "Code Block" }]
-    },
-    {
-      "type": "code",
-      "children": [
-        { "type": "text", "text": "import { BlocksRenderer } from '@k11k/better-blocks-react-renderer';\n\n<BlocksRenderer content={blocks} />" }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 2,
-      "children": [{ "type": "text", "text": "Table" }]
-    },
-    {
-      "type": "table",
-      "children": [
         {
-          "type": "table-row",
+          "type": "list-item",
+          "checked": true,
           "children": [
-            { "type": "table-header-cell", "children": [{ "type": "text", "text": "Feature" }] },
-            { "type": "table-header-cell", "children": [{ "type": "text", "text": "Status" }] },
-            { "type": "table-header-cell", "children": [{ "type": "text", "text": "Phase" }] }
+            {
+              "type": "text",
+              "text": "Set up project"
+            }
           ]
         },
         {
-          "type": "table-row",
+          "type": "list-item",
+          "checked": true,
           "children": [
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Horizontal line" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "1" }] }
+            {
+              "type": "text",
+              "text": "Implement renderer"
+            }
           ]
         },
         {
-          "type": "table-row",
+          "type": "list-item",
+          "checked": false,
           "children": [
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Text alignment" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
+            {
+              "type": "text",
+              "text": "Write documentation"
+            }
           ]
         },
         {
-          "type": "table-row",
+          "type": "list-item",
+          "checked": false,
           "children": [
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Tables" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
-          ]
-        },
-        {
-          "type": "table-row",
-          "children": [
-            { "type": "table-cell", "children": [{ "type": "text", "text": "To-do lists" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
-          ]
-        },
-        {
-          "type": "table-row",
-          "children": [
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Media embeds" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
-          ]
-        },
-        {
-          "type": "table-row",
-          "children": [
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Math (KaTeX)" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
-            { "type": "table-cell", "children": [{ "type": "text", "text": "3" }] }
+            {
+              "type": "text",
+              "text": "Publish to npm"
+            }
           ]
         }
       ]
@@ -408,7 +799,311 @@
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Image" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Blockquote"
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "children": [
+        {
+          "type": "text",
+          "text": "The best way to predict the future is to invent it.",
+          "italic": true
+        },
+        {
+          "type": "text",
+          "text": " — Alan Kay"
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "textAlign": "center",
+      "children": [
+        {
+          "type": "text",
+          "text": "Centered quote with alignment.",
+          "italic": true
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [
+        {
+          "type": "text",
+          "text": "Code Block"
+        }
+      ]
+    },
+    {
+      "type": "code",
+      "children": [
+        {
+          "type": "text",
+          "text": "import { BlocksRenderer } from '@k11k/better-blocks-react-renderer';\n\n<BlocksRenderer content={blocks} />"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [
+        {
+          "type": "text",
+          "text": "Table"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "children": [
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-header-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Feature"
+                }
+              ]
+            },
+            {
+              "type": "table-header-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Status"
+                }
+              ]
+            },
+            {
+              "type": "table-header-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Phase"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Horizontal line"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Done",
+                  "color": "#38A169"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Text alignment"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Done",
+                  "color": "#38A169"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Tables"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Done",
+                  "color": "#38A169"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "To-do lists"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Done",
+                  "color": "#38A169"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Media embeds"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Done",
+                  "color": "#38A169"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Math (KaTeX)"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Done",
+                  "color": "#38A169"
+                }
+              ]
+            },
+            {
+              "type": "table-cell",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [
+        {
+          "type": "text",
+          "text": "Image"
+        }
+      ]
     },
     {
       "type": "image",
@@ -420,12 +1115,22 @@
       },
       "caption": "Better Blocks — a rich-text editor plugin for Strapi v5",
       "imageAlign": "center",
-      "children": [{ "type": "text", "text": "" }]
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     },
     {
       "type": "heading",
       "level": 3,
-      "children": [{ "type": "text", "text": "Image alignment" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Image alignment"
+        }
+      ]
     },
     {
       "type": "image",
@@ -436,7 +1141,12 @@
         "height": 100
       },
       "imageAlign": "left",
-      "children": [{ "type": "text", "text": "" }]
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     },
     {
       "type": "image",
@@ -447,61 +1157,167 @@
         "height": 100
       },
       "imageAlign": "right",
-      "children": [{ "type": "text", "text": "" }]
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Media Embed" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Media Embed"
+        }
+      ]
     },
     {
       "type": "media-embed",
       "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
       "originalUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "children": [{ "type": "text", "text": "" }]
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     },
     {
       "type": "heading",
       "level": 2,
-      "children": [{ "type": "text", "text": "Math (KaTeX / LaTeX)" }]
-    },
-    {
-      "type": "paragraph",
       "children": [
-        { "type": "text", "text": "Einstein's mass–energy equivalence " },
         {
-          "type": "math",
-          "format": "inline",
-          "value": "E = mc^2",
-          "children": [{ "type": "text", "text": "" }]
-        },
-        { "type": "text", "text": " is written inline, mid-sentence." }
+          "type": "text",
+          "text": "Math (KaTeX / LaTeX)"
+        }
       ]
     },
     {
       "type": "paragraph",
-      "children": [{ "type": "text", "text": "A block formula renders centered on its own line:" }]
+      "children": [
+        {
+          "type": "text",
+          "text": "Einstein's mass–energy equivalence "
+        },
+        {
+          "type": "math",
+          "format": "inline",
+          "value": "E = mc^2",
+          "children": [
+            {
+              "type": "text",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " is written inline, mid-sentence."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "A block formula renders centered on its own line:"
+        }
+      ]
     },
     {
       "type": "math",
       "format": "block",
       "value": "\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}",
-      "children": [{ "type": "text", "text": "" }]
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     },
     {
       "type": "math",
       "format": "block",
       "value": "\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}",
-      "children": [{ "type": "text", "text": "" }]
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     },
     {
-      "type": "paragraph",
-      "children": [{ "type": "text", "text": "" }]
+      "type": "heading",
+      "level": 2,
+      "children": [
+        {
+          "type": "text",
+          "text": "Diagrams (Mermaid)"
+        }
+      ]
     },
     {
       "type": "paragraph",
       "children": [
-        { "type": "text", "text": "All features working! 🎉", "bold": true, "color": "#38A169" }
+        {
+          "type": "text",
+          "text": "Block-level Mermaid diagrams render to SVG on the client. A simple flowchart:"
+        }
+      ]
+    },
+    {
+      "type": "diagram",
+      "format": "mermaid",
+      "value": "graph TD\n    A[Start] --> B{Is it working?}\n    B -->|Yes| C[Ship it]\n    B -->|No| D[Debug]\n    D --> B",
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "And a sequence diagram:"
+        }
+      ]
+    },
+    {
+      "type": "diagram",
+      "format": "mermaid",
+      "value": "sequenceDiagram\n    participant U as User\n    participant S as Strapi\n    participant R as Renderer\n    U->>S: Edit content\n    S->>R: Blocks JSON\n    R->>U: Rendered HTML",
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "All features working! 🎉",
+          "bold": true,
+          "color": "#38A169"
+        }
       ]
     }
   ]

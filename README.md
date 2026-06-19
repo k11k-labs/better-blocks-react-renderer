@@ -86,6 +86,25 @@ import 'katex/dist/katex.min.css';
 
 `katex` ships as a dependency of this package, so the stylesheet resolves without a separate install. If KaTeX fails to parse a formula, the renderer falls back to the raw LaTeX source instead of crashing.
 
+### Diagrams (Mermaid)
+
+Block-level `diagram` nodes (`format: 'mermaid'`) are rendered to inline SVG with [Mermaid](https://mermaid.js.org/) &mdash; flowcharts, sequence, class, state, ER, pie charts, and more.
+
+Unlike KaTeX, Mermaid needs a real browser DOM to measure text, so it cannot render synchronously on the server. The renderer keeps SSR/static export safe by emitting the raw Mermaid source inside a `<pre class="mermaid-source">` on the server and during the first client render (so hydration matches), then swapping in the rendered `<div class="mermaid-diagram">` SVG after mount. If Mermaid fails to parse the source, the raw text stays in place as a graceful fallback.
+
+`mermaid` ships as a dependency and is **lazy-loaded** the first time a diagram renders, so it stays out of your server bundle and only downloads on pages that actually use a diagram &mdash; no setup or stylesheet import required.
+
+To render diagrams yourself (e.g. a different engine or custom theming), override the `diagram` block:
+
+```tsx
+<BlocksRenderer
+  content={blocks}
+  blocks={{
+    diagram: ({ code, format }) => <MyDiagram code={code} format={format} />,
+  }}
+/>
+```
+
 ### Astro
 
 `BlocksRenderer` works in [Astro](https://astro.build/) via the [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/) integration. Because the renderer is purely presentational and KaTeX renders to a string on the server (see [Math (KaTeX)](#math-katex)), you can render it as a static [Astro island](https://docs.astro.build/en/concepts/islands/) with **no client directive** &mdash; Astro outputs plain HTML and ships zero JavaScript:
@@ -132,6 +151,7 @@ const { blocks } = Astro.props;
 | `table`                         | `<table>`           | Better Blocks               |
 | `media-embed`                   | `<iframe>` (16:9)   | Better Blocks               |
 | `math` (inline/block)           | `<span>` / `<div>`  | Better Blocks               |
+| `diagram` (mermaid)             | `<div>` (SVG)       | Better Blocks               |
 
 ### Block properties
 
@@ -151,6 +171,8 @@ const { blocks } = Astro.props;
 | `originalUrl` | media-embed               | Original user-provided URL                            |
 | `format`      | math                      | `inline` (`<span>`) or `block` (`<div>`)              |
 | `value`       | math                      | LaTeX source rendered with KaTeX                      |
+| `format`      | diagram                   | `mermaid`                                             |
+| `value`       | diagram                   | Mermaid source rendered to SVG                        |
 
 ## Supported Modifiers
 
@@ -219,6 +241,8 @@ Override any block type with your own component:
     // Bring your own math engine (e.g. MathJax) instead of the built-in KaTeX
     math: ({ formula, inline }) =>
       inline ? <MyInlineMath formula={formula} /> : <MyBlockMath formula={formula} />,
+    // Bring your own diagram engine instead of the built-in Mermaid
+    diagram: ({ code, format }) => <MyDiagram code={code} format={format} />,
   }}
 />
 ```
@@ -265,6 +289,7 @@ import type {
   TableHeaderCellNode,
   MediaEmbedNode,
   MathNode,
+  DiagramNode,
   TextAlign,
   CustomBlocksConfig,
   CustomModifiersConfig,

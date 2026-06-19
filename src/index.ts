@@ -21,6 +21,7 @@ export type {
   TableHeaderCellNode,
   MediaEmbedNode,
   MathNode,
+  DiagramNode,
   TextAlign,
   CustomBlocksConfig,
   CustomModifiersConfig,

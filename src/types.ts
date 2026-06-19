@@ -130,6 +130,13 @@ export type MediaEmbedNode = {
   children: [{ type: 'text'; text: '' }];
 };
 
+export type DiagramNode = {
+  type: 'diagram';
+  format: 'mermaid';
+  value: string;
+  children: [{ type: 'text'; text: '' }];
+};
+
 export type BlockNode =
   | ParagraphNode
   | HeadingNode
@@ -140,7 +147,8 @@ export type BlockNode =
   | HorizontalLineNode
   | TableNode
   | MediaEmbedNode
-  | MathNode;
+  | MathNode
+  | DiagramNode;
 
 export type BlocksContent = BlockNode[];
 
@@ -193,6 +201,7 @@ export type CustomBlocksConfig = Partial<{
   'table-header-cell': ComponentType<BlockComponentProps>;
   'media-embed': ComponentType<{ url: string; originalUrl?: string }>;
   math: ComponentType<{ formula: string; inline: boolean }>;
+  diagram: ComponentType<{ code: string; format: 'mermaid' }>;
 }>;
 
 export type FontFamilyModifierProps = {
