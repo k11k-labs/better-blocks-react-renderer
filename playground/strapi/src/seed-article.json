@@ -394,6 +394,14 @@
             { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
             { "type": "table-cell", "children": [{ "type": "text", "text": "2" }] }
           ]
+        },
+        {
+          "type": "table-row",
+          "children": [
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Math (KaTeX)" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "Done", "color": "#38A169" }] },
+            { "type": "table-cell", "children": [{ "type": "text", "text": "3" }] }
+          ]
         }
       ]
     },
@@ -450,6 +458,40 @@
       "type": "media-embed",
       "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
       "originalUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "children": [{ "type": "text", "text": "" }]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Math (KaTeX / LaTeX)" }]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        { "type": "text", "text": "Einstein's mass–energy equivalence " },
+        {
+          "type": "math",
+          "format": "inline",
+          "value": "E = mc^2",
+          "children": [{ "type": "text", "text": "" }]
+        },
+        { "type": "text", "text": " is written inline, mid-sentence." }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [{ "type": "text", "text": "A block formula renders centered on its own line:" }]
+    },
+    {
+      "type": "math",
+      "format": "block",
+      "value": "\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}",
+      "children": [{ "type": "text", "text": "" }]
+    },
+    {
+      "type": "math",
+      "format": "block",
+      "value": "\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}",
       "children": [{ "type": "text", "text": "" }]
     },
     {

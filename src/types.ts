@@ -27,7 +27,14 @@ export type LinkNode = {
   children: TextNode[];
 };
 
-export type InlineNode = TextNode | LinkNode;
+export type MathNode = {
+  type: 'math';
+  format: 'inline' | 'block';
+  value: string;
+  children: [{ type: 'text'; text: '' }];
+};
+
+export type InlineNode = TextNode | LinkNode | MathNode;
 
 // ── Text Alignment ──────────────────────────────────────────────────
 
@@ -132,7 +139,8 @@ export type BlockNode =
   | ImageNode
   | HorizontalLineNode
   | TableNode
-  | MediaEmbedNode;
+  | MediaEmbedNode
+  | MathNode;
 
 export type BlocksContent = BlockNode[];
 
@@ -184,6 +192,7 @@ export type CustomBlocksConfig = Partial<{
   'table-cell': ComponentType<BlockComponentProps>;
   'table-header-cell': ComponentType<BlockComponentProps>;
   'media-embed': ComponentType<{ url: string; originalUrl?: string }>;
+  math: ComponentType<{ formula: string; inline: boolean }>;
 }>;
 
 export type FontFamilyModifierProps = {
