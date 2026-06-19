@@ -82,6 +82,36 @@ import 'katex/dist/katex.min.css';
 
 `katex` ships as a dependency of this package, so the stylesheet resolves without a separate install. If KaTeX fails to parse a formula, the renderer falls back to the raw LaTeX source instead of crashing.
 
+### Astro
+
+`BlocksRenderer` works in [Astro](https://astro.build/) via the [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/) integration. Because the renderer is purely presentational and KaTeX renders to a string on the server (see [Math (KaTeX)](#math-katex)), you can render it as a static [Astro island](https://docs.astro.build/en/concepts/islands/) with **no client directive** &mdash; Astro outputs plain HTML and ships zero JavaScript:
+
+```astro
+---
+import { BlocksRenderer } from '@k11k/better-blocks-react-renderer';
+// Import the KaTeX stylesheet once (e.g. in a shared layout) so math displays correctly.
+import 'katex/dist/katex.min.css';
+
+const { blocks } = Astro.props;
+---
+
+<BlocksRenderer content={blocks} />
+```
+
+You only need a client directive (`client:load`, `client:visible`, etc.) if you pass **interactive** custom renderers &mdash; for example a to-do `list-item` with a working checkbox, or a custom `math` renderer that hydrates on the client. Static content (including server-rendered KaTeX) needs no hydration:
+
+```astro
+---
+import { BlocksRenderer } from '@k11k/better-blocks-react-renderer';
+const { blocks } = Astro.props;
+---
+
+<!-- Use a client directive only when your custom renderers need to run in the browser -->
+<BlocksRenderer content={blocks} client:visible />
+```
+
+> **Note:** When you hydrate with a client directive, custom renderers passed as props must be serializable references (e.g. imported components), since Astro serializes island props. Keep inline closures for the static (no-directive) case.
+
 ## Supported Blocks
 
 | Block                           | Default element     | Source                      |
