@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.5.0
+
+### Minor Changes
+
+- [#13](https://github.com/k11k-labs/better-blocks-react-renderer/pull/13) [`4d8f91b`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/4d8f91b7da484acf0629539d10b77d63b35ab7a1) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for KaTeX/LaTeX math nodes from the Better Blocks plugin. Inline math renders as `<span class="katex-inline">` and block math as `<div class="katex-block">`, using `katex.renderToString` for SSR-safe output. Math falls back to the raw LaTeX source if KaTeX fails to parse, and can be overridden with a custom `math` block renderer (e.g. to use MathJax). Consumers should import `katex/dist/katex.min.css` once in their app.
+
 ## 0.4.0
 
 ### Minor Changes
