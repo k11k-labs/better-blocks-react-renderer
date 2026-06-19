@@ -1,7 +1,18 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BlocksRenderer } from '../src';
 import type { BlocksContent } from '../src';
+
+// Mermaid needs a real browser DOM, so stub it with a renderer that echoes the
+// source into a marker SVG. This keeps the diagram tests fast and deterministic.
+vi.mock('mermaid', () => ({
+  default: {
+    initialize: vi.fn(),
+    render: vi.fn(async (_id: string, code: string) => ({
+      svg: `<svg class="mock-mermaid"><text>${code}</text></svg>`,
+    })),
+  },
+}));
 
 describe('BlocksRenderer', () => {
   it('returns null for empty content', () => {
@@ -1108,5 +1119,62 @@ describe('BlocksRenderer', () => {
       />
     );
     expect(screen.getByTestId('custom-bg')).toBeInTheDocument();
+  });
+
+  // ── Diagram (Mermaid) ────────────────────────────────────────────
+
+  it('renders the raw mermaid source as a fallback before/instead of the SVG', () => {
+    const content: BlocksContent = [
+      {
+        type: 'diagram',
+        format: 'mermaid',
+        value: 'graph TD\n  A-->B',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const pre = container.querySelector('pre.mermaid-source');
+    expect(pre).toBeInTheDocument();
+    expect(pre?.textContent).toContain('graph TD');
+  });
+
+  it('renders a mermaid diagram to inline SVG after mount', async () => {
+    const content: BlocksContent = [
+      {
+        type: 'diagram',
+        format: 'mermaid',
+        value: 'graph TD\n  A-->B',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    await waitFor(() => {
+      expect(container.querySelector('div.mermaid-diagram svg.mock-mermaid')).toBeInTheDocument();
+    });
+    expect(container.querySelector('div.mermaid-diagram')?.textContent).toContain('A-->B');
+  });
+
+  it('uses a custom diagram renderer with code and format props', () => {
+    const content: BlocksContent = [
+      {
+        type: 'diagram',
+        format: 'mermaid',
+        value: 'pie title Pets',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          diagram: ({ code, format }) => (
+            <div data-testid="custom-diagram" data-code={code} data-format={format} />
+          ),
+        }}
+      />
+    );
+    const el = screen.getByTestId('custom-diagram');
+    expect(el).toHaveAttribute('data-code', 'pie title Pets');
+    expect(el).toHaveAttribute('data-format', 'mermaid');
   });
 });

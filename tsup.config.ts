@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', 'katex'],
+  external: ['react', 'react-dom', 'katex', 'mermaid'],
 });

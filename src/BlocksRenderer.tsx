@@ -1,12 +1,14 @@
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
 import katex from 'katex';
 
+import { MermaidDiagram } from './MermaidDiagram';
 import type {
   BlockNode,
   BlocksRendererProps,
   CodeNode,
   CustomBlocksConfig,
   CustomModifiersConfig,
+  DiagramNode,
   HeadingNode,
   HorizontalLineNode,
   ImageNode,
@@ -366,6 +368,8 @@ function renderBlock(
       return renderMediaEmbed(block, key, blocks);
     case 'math':
       return renderMath(block, key, blocks);
+    case 'diagram':
+      return renderDiagram(block, key, blocks);
     default:
       return null;
   }
@@ -532,6 +536,19 @@ function renderMediaEmbed(
       />
     </div>
   );
+}
+
+// ── Diagram (Mermaid) Rendering ──────────────────────────────────────
+
+function renderDiagram(block: DiagramNode, key: number, blocks?: CustomBlocksConfig): ReactNode {
+  const DiagramComp = blocks?.diagram;
+  const code = block.value ?? '';
+
+  if (DiagramComp) {
+    return <DiagramComp key={key} code={code} format={block.format} />;
+  }
+
+  return <MermaidDiagram key={key} value={code} />;
 }
 
 // ── Main Component ───────────────────────────────────────────────────
