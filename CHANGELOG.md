@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.5.1
+
+### Patch Changes
+
+- [#15](https://github.com/k11k-labs/better-blocks-react-renderer/pull/15) [`bd6f61b`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/bd6f61b4dd6642ce0578ce11f70ea3155cc11eb3) Thanks [@kkukielka](https://github.com/kkukielka)! - Document Astro integration in the README. Adds an "Astro" usage section covering `@astrojs/react`, when a client directive is (and isn't) needed, the `katex/dist/katex.min.css` import, and the island prop serialization caveat for custom renderers.
+
 ## 0.5.0
 
 ### Minor Changes
