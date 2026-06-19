@@ -1310,6 +1310,107 @@
       ]
     },
     {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Callouts (Admonitions)" }]
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "This callout uses the default localized title and GitHub-style rendering."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "tip",
+      "title": "Pro tip",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            { "type": "text", "text": "Callouts support a " },
+            { "type": "text", "text": "custom title", "bold": true },
+            { "type": "text", "text": " and nested content, including lists:" }
+          ]
+        },
+        {
+          "type": "list",
+          "format": "unordered",
+          "children": [
+            {
+              "type": "list-item",
+              "children": [{ "type": "text", "text": "Paragraphs" }]
+            },
+            {
+              "type": "list-item",
+              "children": [{ "type": "text", "text": "Lists" }]
+            },
+            {
+              "type": "list-item",
+              "children": [
+                { "type": "text", "text": "Links and " },
+                { "type": "text", "text": "inline formatting", "italic": true }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            { "type": "text", "text": "Key information users need to know." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "warning",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            { "type": "text", "text": "Pay attention to this potentially risky step." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "caution",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            { "type": "text", "text": "Negative consequences can result from this action." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
+    },
+    {
       "type": "paragraph",
       "children": [
         {

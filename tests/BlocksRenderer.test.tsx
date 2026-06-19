@@ -1177,4 +1177,63 @@ describe('BlocksRenderer', () => {
     expect(el).toHaveAttribute('data-code', 'pie title Pets');
     expect(el).toHaveAttribute('data-format', 'mermaid');
   });
+
+  it('renders a callout with the localized variant label and nested content', () => {
+    const content: BlocksContent = [
+      {
+        type: 'callout',
+        variant: 'warning',
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'Be careful.' }] }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const aside = container.querySelector('aside.bb-callout.bb-callout-warning');
+    expect(aside).toBeInTheDocument();
+    expect(aside).toHaveAttribute('role', 'note');
+    // Default title falls back to the variant label, and the icon is present
+    expect(aside?.querySelector('.bb-callout-title')?.textContent).toBe('Warning');
+    expect(aside?.querySelector('svg.bb-callout-icon')).toBeInTheDocument();
+    // Nested block children are rendered recursively
+    expect(aside?.querySelector('p:not(.bb-callout-title)')?.textContent).toBe('Be careful.');
+  });
+
+  it('uses a custom title when provided', () => {
+    const content: BlocksContent = [
+      {
+        type: 'callout',
+        variant: 'tip',
+        title: 'Pro tip',
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'x' }] }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('.bb-callout-title')?.textContent).toBe('Pro tip');
+  });
+
+  it('uses a custom callout renderer with variant, title and children', () => {
+    const content: BlocksContent = [
+      {
+        type: 'callout',
+        variant: 'important',
+        title: 'Heads up',
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'Body' }] }],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          callout: ({ variant, title, children }) => (
+            <section data-testid="custom-callout" data-variant={variant} data-title={title}>
+              {children}
+            </section>
+          ),
+        }}
+      />
+    );
+    const el = screen.getByTestId('custom-callout');
+    expect(el).toHaveAttribute('data-variant', 'important');
+    expect(el).toHaveAttribute('data-title', 'Heads up');
+    expect(el.textContent).toContain('Body');
+  });
 });

@@ -105,6 +105,55 @@ To render diagrams yourself (e.g. a different engine or custom theming), overrid
 />
 ```
 
+### Callouts (Admonitions)
+
+Block-level `callout` nodes render GitHub-style alerts in five variants &mdash; `note`, `tip`, `important`, `warning`, and `caution`. Each renders as an `<aside role="note">` with a colored left border, a title row (icon + label), and the nested block children (paragraphs, lists, links, etc.). If a `title` is set on the node it is used; otherwise the localized variant label is shown. Colors are applied inline, so there is no stylesheet to import.
+
+To match your design system, override the `callout` block. It receives `variant`, `title`, and the already-rendered `children`:
+
+```tsx
+<BlocksRenderer
+  content={blocks}
+  blocks={{
+    callout: ({ variant, title, children }) => (
+      <div className={`alert alert-${variant}`}>
+        {title && <h4>{title}</h4>}
+        {children}
+      </div>
+    ),
+  }}
+/>
+```
+
+**Styling & dark mode.** The default markup carries stable classes &mdash; `bb-callout`, `bb-callout-{variant}`, `bb-callout-title`, and `bb-callout-icon` &mdash; which you can target for spacing, typography, radius, etc. The accent **colors are applied inline** (so the default works with zero setup), which means you can't recolor them with a plain CSS class. To re-theme colors &mdash; including a dark-mode palette &mdash; override the `callout` block and apply your own colors per `variant`:
+
+```tsx
+const ACCENT: Record<string, string> = {
+  note: 'var(--cl-note, #4493f8)',
+  tip: 'var(--cl-tip, #3fb950)',
+  important: 'var(--cl-important, #ab7df8)',
+  warning: 'var(--cl-warning, #d29922)',
+  caution: 'var(--cl-caution, #f85149)',
+};
+
+<BlocksRenderer
+  content={blocks}
+  blocks={{
+    callout: ({ variant, title, children }) => (
+      <aside
+        className={`callout callout-${variant}`}
+        style={{ borderLeft: `4px solid ${ACCENT[variant]}` }}
+      >
+        <p style={{ color: ACCENT[variant], fontWeight: 600 }}>{title ?? variant}</p>
+        {children}
+      </aside>
+    ),
+  }}
+/>;
+```
+
+Driving the accent from CSS variables (as above) lets you flip palettes with a `@media (prefers-color-scheme: dark)` or a `.dark` class rule on a parent.
+
 ### Astro
 
 `BlocksRenderer` works in [Astro](https://astro.build/) via the [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/) integration. Because the renderer is purely presentational and KaTeX renders to a string on the server (see [Math (KaTeX)](#math-katex)), you can render it as a static [Astro island](https://docs.astro.build/en/concepts/islands/) with **no client directive** &mdash; Astro outputs plain HTML and ships zero JavaScript:
@@ -152,6 +201,7 @@ const { blocks } = Astro.props;
 | `media-embed`                   | `<iframe>` (16:9)   | Better Blocks               |
 | `math` (inline/block)           | `<span>` / `<div>`  | Better Blocks               |
 | `diagram` (mermaid)             | `<div>` (SVG)       | Better Blocks               |
+| `callout` (admonition)          | `<aside>`           | Better Blocks               |
 
 ### Block properties
 
