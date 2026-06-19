@@ -70,6 +70,18 @@ import { BlocksRenderer } from '@k11k/better-blocks-react-renderer';
 
 That's it. All Better Blocks features &mdash; colors, tables, to-do lists, media embeds, alignment, and more &mdash; work automatically.
 
+### Math (KaTeX)
+
+Math nodes are rendered with [KaTeX](https://katex.org/) &mdash; inline math becomes a `<span class="katex-inline">` and block math a `<div class="katex-block">`. Rendering happens via `katex.renderToString`, so it works in SSR and during static export with no client-side hydration step.
+
+KaTeX needs its stylesheet to display correctly. Import it **once** in your app entry point:
+
+```ts
+import 'katex/dist/katex.min.css';
+```
+
+`katex` ships as a dependency of this package, so the stylesheet resolves without a separate install. If KaTeX fails to parse a formula, the renderer falls back to the raw LaTeX source instead of crashing.
+
 ## Supported Blocks
 
 | Block                           | Default element     | Source                      |
@@ -85,6 +97,7 @@ That's it. All Better Blocks features &mdash; colors, tables, to-do lists, media
 | `horizontal-line`               | `<hr>`              | Better Blocks               |
 | `table`                         | `<table>`           | Better Blocks               |
 | `media-embed`                   | `<iframe>` (16:9)   | Better Blocks               |
+| `math` (inline/block)           | `<span>` / `<div>`  | Better Blocks               |
 
 ### Block properties
 
@@ -102,6 +115,8 @@ That's it. All Better Blocks features &mdash; colors, tables, to-do lists, media
 | `imageAlign`  | image                     | Image alignment (`left`, `center`, `right`)           |
 | `url`         | media-embed               | Embed URL (YouTube/Vimeo iframe src)                  |
 | `originalUrl` | media-embed               | Original user-provided URL                            |
+| `format`      | math                      | `inline` (`<span>`) or `block` (`<div>`)              |
+| `value`       | math                      | LaTeX source rendered with KaTeX                      |
 
 ## Supported Modifiers
 
@@ -167,6 +182,9 @@ Override any block type with your own component:
         <iframe src={url} allowFullScreen title="Embedded media" />
       </div>
     ),
+    // Bring your own math engine (e.g. MathJax) instead of the built-in KaTeX
+    math: ({ formula, inline }) =>
+      inline ? <MyInlineMath formula={formula} /> : <MyBlockMath formula={formula} />,
   }}
 />
 ```
@@ -212,6 +230,7 @@ import type {
   TableCellNode,
   TableHeaderCellNode,
   MediaEmbedNode,
+  MathNode,
   TextAlign,
   CustomBlocksConfig,
   CustomModifiersConfig,

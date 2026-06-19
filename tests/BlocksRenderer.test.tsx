@@ -665,6 +665,112 @@ describe('BlocksRenderer', () => {
     expect(wrapper).toHaveStyle({ position: 'relative', paddingBottom: '56.25%', height: '0' });
   });
 
+  // ── Math (KaTeX) ─────────────────────────────────────────────────
+
+  it('renders block math as a div.katex-block', () => {
+    const content: BlocksContent = [
+      {
+        type: 'math',
+        format: 'block',
+        value: 'E = mc^2',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const block = container.querySelector('div.katex-block');
+    expect(block).toBeInTheDocument();
+    // KaTeX emits a .katex element with the source in an annotation
+    expect(block?.querySelector('.katex')).toBeInTheDocument();
+    expect(block?.textContent).toContain('E = mc^2');
+  });
+
+  it('renders inline math as a span.katex-inline within a paragraph', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'Equation ' },
+          {
+            type: 'math',
+            format: 'inline',
+            value: 'a^2 + b^2 = c^2',
+            children: [{ type: 'text', text: '' }],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const span = container.querySelector('span.katex-inline');
+    expect(span).toBeInTheDocument();
+    expect(span?.closest('p')).toBeInTheDocument();
+    expect(span?.querySelector('.katex')).toBeInTheDocument();
+  });
+
+  it('renders inline math in non-display mode (no .katex-display wrapper)', () => {
+    const content: BlocksContent = [
+      {
+        type: 'math',
+        format: 'inline',
+        value: 'x + y',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('span.katex-inline')).toBeInTheDocument();
+    expect(container.querySelector('.katex-display')).toBeNull();
+  });
+
+  it('renders block math in display mode (.katex-display wrapper)', () => {
+    const content: BlocksContent = [
+      {
+        type: 'math',
+        format: 'block',
+        value: '\\frac{1}{2}',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('.katex-display')).toBeInTheDocument();
+  });
+
+  it('uses custom math renderer with formula and inline props', () => {
+    const content: BlocksContent = [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            type: 'math',
+            format: 'inline',
+            value: '\\pi',
+            children: [{ type: 'text', text: '' }],
+          },
+        ],
+      },
+      {
+        type: 'math',
+        format: 'block',
+        value: '\\sum x',
+        children: [{ type: 'text', text: '' }],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          math: ({ formula, inline }) => (
+            <span data-testid="custom-math" data-formula={formula} data-inline={String(inline)} />
+          ),
+        }}
+      />
+    );
+    const els = screen.getAllByTestId('custom-math');
+    expect(els).toHaveLength(2);
+    expect(els[0]).toHaveAttribute('data-formula', '\\pi');
+    expect(els[0]).toHaveAttribute('data-inline', 'true');
+    expect(els[1]).toHaveAttribute('data-formula', '\\sum x');
+    expect(els[1]).toHaveAttribute('data-inline', 'false');
+  });
+
   // ── Text Modifiers: uppercase, superscript, subscript ────────────
 
   it('renders uppercase text', () => {

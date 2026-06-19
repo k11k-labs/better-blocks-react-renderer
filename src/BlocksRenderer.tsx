@@ -1,4 +1,5 @@
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
+import katex from 'katex';
 
 import type {
   BlockNode,
@@ -12,6 +13,7 @@ import type {
   InlineNode,
   ListItemNode,
   ListNode,
+  MathNode,
   MediaEmbedNode,
   ParagraphNode,
   QuoteNode,
@@ -128,6 +130,38 @@ function renderTextNode(node: TextNode, key: number, modifiers?: CustomModifiers
   return <Fragment key={key}>{content}</Fragment>;
 }
 
+// ── Math (KaTeX) Rendering ───────────────────────────────────────────
+
+function renderMath(node: MathNode, key: number, blocks?: CustomBlocksConfig): ReactNode {
+  const isBlock = node.format === 'block';
+  const MathComp = blocks?.math;
+  const formula = node.value ?? '';
+
+  if (MathComp) {
+    return <MathComp key={key} formula={formula} inline={!isBlock} />;
+  }
+
+  const Tag = isBlock ? 'div' : 'span';
+  const className = isBlock ? 'katex-block' : 'katex-inline';
+
+  // KaTeX renders to an HTML string (SSR-friendly). With `throwOnError: false`
+  // it renders parse errors inline instead of throwing; the try/catch is a
+  // last-resort guard that falls back to the raw LaTeX source.
+  try {
+    const html = katex.renderToString(formula, {
+      displayMode: isBlock,
+      throwOnError: false,
+    });
+    return <Tag key={key} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
+  } catch {
+    return (
+      <Tag key={key} className={className}>
+        {formula}
+      </Tag>
+    );
+  }
+}
+
 // ── Inline Rendering ─────────────────────────────────────────────────
 
 function renderInlineContent(
@@ -138,6 +172,10 @@ function renderInlineContent(
   return children.map((child, index) => {
     if (child.type === 'text') {
       return renderTextNode(child, index, modifiers);
+    }
+
+    if (child.type === 'math') {
+      return renderMath(child, index, blocks);
     }
 
     if (child.type === 'link') {
@@ -326,6 +364,8 @@ function renderBlock(
       return renderTable(block, key, blocks, modifiers);
     case 'media-embed':
       return renderMediaEmbed(block, key, blocks);
+    case 'math':
+      return renderMath(block, key, blocks);
     default:
       return null;
   }
