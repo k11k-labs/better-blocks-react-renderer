@@ -1190,6 +1190,9 @@ describe('BlocksRenderer', () => {
     const aside = container.querySelector('aside.bb-callout.bb-callout-warning');
     expect(aside).toBeInTheDocument();
     expect(aside).toHaveAttribute('role', 'note');
+    // Accent border and matching tinted background (~8% opacity of the accent color)
+    expect(aside).toHaveStyle({ borderLeft: '0.25rem solid #9a6700' });
+    expect(aside).toHaveStyle({ backgroundColor: '#9a670014' });
     // Default title falls back to the variant label, and the icon is present
     expect(aside?.querySelector('.bb-callout-title')?.textContent).toBe('Warning');
     expect(aside?.querySelector('svg.bb-callout-icon')).toBeInTheDocument();

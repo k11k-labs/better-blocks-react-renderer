@@ -616,6 +616,8 @@ function renderCallout(
       role="note"
       style={{
         borderLeft: `0.25rem solid ${meta.color}`,
+        // Subtle accent-tinted background (~8% opacity) to match the editor preview.
+        backgroundColor: `${meta.color}14`,
         padding: '0.5rem 1rem',
         margin: '1rem 0',
       }}
