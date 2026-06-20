@@ -1197,7 +1197,11 @@ describe('BlocksRenderer', () => {
     expect(aside?.querySelector('.bb-callout-title')?.textContent).toBe('Warning');
     expect(aside?.querySelector('svg.bb-callout-icon')).toBeInTheDocument();
     // Nested block children are rendered recursively
-    expect(aside?.querySelector('p:not(.bb-callout-title)')?.textContent).toBe('Be careful.');
+    const body = aside?.querySelector('p:not(.bb-callout-title)');
+    expect(body?.textContent).toBe('Be careful.');
+    // Outer margins of the first/last child collapse so the body sits balanced
+    // within the callout padding (single child is both first and last)
+    expect(body).toHaveStyle({ marginTop: '0px', marginBottom: '0px' });
   });
 
   it('uses a custom title when provided', () => {

@@ -1,4 +1,11 @@
-import { Fragment, type CSSProperties, type ReactNode } from 'react';
+import {
+  Fragment,
+  cloneElement,
+  isValidElement,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import katex from 'katex';
 
 import { MermaidDiagram } from './MermaidDiagram';
@@ -594,9 +601,21 @@ function renderCallout(
 ): ReactNode {
   const variant: CalloutVariant = CALLOUT_VARIANTS[block.variant] ? block.variant : 'note';
   const meta = CALLOUT_VARIANTS[variant];
-  const children = block.children.map((child, index) =>
+  const childNodes = block.children.map((child, index) =>
     renderBlock(child, index, blocks, modifiers)
   );
+  // Collapse the outer block margins (e.g. a paragraph's default top/bottom
+  // margin) so the body sits flush within the callout's padding, keeping the
+  // vertical spacing balanced instead of leaving a gap below the content.
+  const lastIndex = childNodes.length - 1;
+  const children = childNodes.map((node, index) => {
+    if (!isValidElement(node)) return node;
+    const element = node as ReactElement<{ style?: CSSProperties }>;
+    const collapsed: CSSProperties = {};
+    if (index === 0) collapsed.marginTop = 0;
+    if (index === lastIndex) collapsed.marginBottom = 0;
+    return cloneElement(element, { style: { ...element.props.style, ...collapsed } });
+  });
 
   const CalloutComp = blocks?.callout;
   if (CalloutComp) {
@@ -628,7 +647,9 @@ function renderCallout(
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
-          margin: '0 0 0.25rem',
+          // GitHub spacing: tight title line with a 1rem gap before the body.
+          lineHeight: 1,
+          margin: '0 0 1rem',
           fontWeight: 600,
           color: meta.color,
         }}
