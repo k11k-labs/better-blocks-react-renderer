@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.8.0
+
+### Minor Changes
+
+- [#25](https://github.com/k11k-labs/better-blocks-react-renderer/pull/25) [`b9a43e3`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/b9a43e3a59285411a4658fd084e2c88509697729) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for the `details` (collapsible) block. It renders a native, accessible `<details>` / `<summary>` disclosure, honors `defaultOpen` via the HTML `open` attribute, supports arbitrarily nested `details`, and can be overridden through the `blocks.details` prop.
+
 ## 0.7.1
 
 ### Patch Changes
