@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.7.1
+
+### Patch Changes
+
+- [`4e64512`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/4e6451222caa8d46fefd7d65f3a57ba780f1c16c) Thanks [@kkukielka](https://github.com/kkukielka)! - Fix callout (admonition) blocks not showing a background color on the frontend. The default callout renderer now applies a subtle accent-tinted background, balances the vertical spacing to match GitHub's alert styling, and uses GitHub's exact Caution accent color.
+
 ## 0.7.0
 
 ### Minor Changes
