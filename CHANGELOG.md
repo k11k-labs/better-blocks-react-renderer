@@ -1,5 +1,11 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.9.0
+
+### Minor Changes
+
+- [#28](https://github.com/k11k-labs/better-blocks-react-renderer/pull/28) [`7515d84`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/7515d84baaad89308b3c0e60b46f2d3262bc484d) Thanks [@kkukielka](https://github.com/kkukielka)! - Add support for the `button` block (WordPress-style CTA + Media Library file download). Link mode renders an `<a>` with `href`/`target`/`rel`/`aria-label`; file mode renders a download link with an optional file-type icon (`showFileIcon`) and human-readable size (`showFileSize`). The `style` object is applied as inline CSS, `alignment` controls a block-level wrapper, hover colors are exposed as CSS custom properties, and the block is overridable through the `blocks.button` prop.
+
 ## 0.8.0
 
 ### Minor Changes
