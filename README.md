@@ -154,6 +154,26 @@ const ACCENT: Record<string, string> = {
 
 Driving the accent from CSS variables (as above) lets you flip palettes with a `@media (prefers-color-scheme: dark)` or a `.dark` class rule on a parent.
 
+### Details / Summary (Collapsible)
+
+Block-level `details` nodes render a native, keyboard-accessible `<details>` / `<summary>` disclosure. The `summary` field is the plain-text label, the optional `defaultOpen` boolean maps to the HTML `open` attribute (honored on initial render so screen readers get the correct state), and `children` are block-level content (paragraphs, lists, tables, images, and nested `details`) rendered after the summary. The default markup carries stable `bb-details` and `bb-details-summary` classes for styling.
+
+To match your design system, override the `details` block. It receives `summary`, `defaultOpen`, and the already-rendered `children`:
+
+```tsx
+<BlocksRenderer
+  content={blocks}
+  blocks={{
+    details: ({ summary, defaultOpen, children }) => (
+      <details open={defaultOpen} className="custom-details">
+        <summary>{summary}</summary>
+        {children}
+      </details>
+    ),
+  }}
+/>
+```
+
 ### Astro
 
 `BlocksRenderer` works in [Astro](https://astro.build/) via the [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/) integration. Because the renderer is purely presentational and KaTeX renders to a string on the server (see [Math (KaTeX)](#math-katex)), you can render it as a static [Astro island](https://docs.astro.build/en/concepts/islands/) with **no client directive** &mdash; Astro outputs plain HTML and ships zero JavaScript:
@@ -202,6 +222,7 @@ const { blocks } = Astro.props;
 | `math` (inline/block)           | `<span>` / `<div>`  | Better Blocks               |
 | `diagram` (mermaid)             | `<div>` (SVG)       | Better Blocks               |
 | `callout` (admonition)          | `<aside>`           | Better Blocks               |
+| `details` (collapsible)         | `<details>`         | Better Blocks               |
 
 ### Block properties
 
@@ -223,6 +244,8 @@ const { blocks } = Astro.props;
 | `value`       | math                      | LaTeX source rendered with KaTeX                      |
 | `format`      | diagram                   | `mermaid`                                             |
 | `value`       | diagram                   | Mermaid source rendered to SVG                        |
+| `summary`     | details                   | Plain-text label for the `<summary>`                  |
+| `defaultOpen` | details                   | Open on initial render (HTML `open` attribute)        |
 
 ## Supported Modifiers
 

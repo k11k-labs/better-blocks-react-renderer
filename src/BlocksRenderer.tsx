@@ -17,6 +17,7 @@ import type {
   CodeNode,
   CustomBlocksConfig,
   CustomModifiersConfig,
+  DetailsNode,
   DiagramNode,
   HeadingNode,
   HorizontalLineNode,
@@ -381,6 +382,8 @@ function renderBlock(
       return renderDiagram(block, key, blocks);
     case 'callout':
       return renderCallout(block, key, blocks, modifiers);
+    case 'details':
+      return renderDetails(block, key, blocks, modifiers);
     default:
       return null;
   }
@@ -668,6 +671,35 @@ function renderCallout(
       </p>
       {children}
     </aside>
+  );
+}
+
+// ── Details / Summary (Collapsible) Rendering ────────────────────────
+
+function renderDetails(
+  block: DetailsNode,
+  key: number,
+  blocks?: CustomBlocksConfig,
+  modifiers?: CustomModifiersConfig
+): ReactNode {
+  const children = block.children.map((child, index) =>
+    renderBlock(child, index, blocks, modifiers)
+  );
+
+  const DetailsComp = blocks?.details;
+  if (DetailsComp) {
+    return (
+      <DetailsComp key={key} summary={block.summary} defaultOpen={block.defaultOpen}>
+        {children}
+      </DetailsComp>
+    );
+  }
+
+  return (
+    <details key={key} className="bb-details" open={block.defaultOpen}>
+      <summary className="bb-details-summary">{block.summary}</summary>
+      {children}
+    </details>
   );
 }
 

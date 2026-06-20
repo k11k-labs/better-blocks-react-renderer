@@ -24,6 +24,7 @@ export type {
   DiagramNode,
   CalloutNode,
   CalloutVariant,
+  DetailsNode,
   TextAlign,
   CustomBlocksConfig,
   CustomModifiersConfig,

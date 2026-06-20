@@ -1243,4 +1243,86 @@ describe('BlocksRenderer', () => {
     expect(el).toHaveAttribute('data-title', 'Heads up');
     expect(el.textContent).toContain('Body');
   });
+
+  it('renders a details block with a summary and nested content', () => {
+    const content: BlocksContent = [
+      {
+        type: 'details',
+        summary: 'Click to expand',
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'Hidden content.' }] }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const details = container.querySelector('details.bb-details');
+    expect(details).toBeInTheDocument();
+    // Closed by default when defaultOpen is omitted
+    expect(details).not.toHaveAttribute('open');
+    const summary = details?.querySelector('summary.bb-details-summary');
+    expect(summary?.textContent).toBe('Click to expand');
+    // Block children are rendered recursively inside the details
+    expect(details?.querySelector('p')?.textContent).toBe('Hidden content.');
+  });
+
+  it('honors defaultOpen via the open attribute', () => {
+    const content: BlocksContent = [
+      {
+        type: 'details',
+        summary: 'Already open',
+        defaultOpen: true,
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'Visible.' }] }],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('details.bb-details')).toHaveAttribute('open');
+  });
+
+  it('supports arbitrarily nested details blocks', () => {
+    const content: BlocksContent = [
+      {
+        type: 'details',
+        summary: 'Outer',
+        children: [
+          {
+            type: 'details',
+            summary: 'Inner',
+            children: [{ type: 'paragraph', children: [{ type: 'text', text: 'Deep.' }] }],
+          },
+        ],
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const outer = container.querySelector('details.bb-details');
+    const inner = outer?.querySelector('details.bb-details');
+    expect(inner).toBeInTheDocument();
+    expect(inner?.querySelector('summary')?.textContent).toBe('Inner');
+    expect(inner?.querySelector('p')?.textContent).toBe('Deep.');
+  });
+
+  it('uses a custom details renderer with summary, defaultOpen and children', () => {
+    const content: BlocksContent = [
+      {
+        type: 'details',
+        summary: 'More info',
+        defaultOpen: true,
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'Body' }] }],
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          details: ({ summary, defaultOpen, children }) => (
+            <details data-testid="custom-details" data-summary={summary} open={defaultOpen}>
+              <summary>{summary}</summary>
+              {children}
+            </details>
+          ),
+        }}
+      />
+    );
+    const el = screen.getByTestId('custom-details');
+    expect(el).toHaveAttribute('data-summary', 'More info');
+    expect(el).toHaveAttribute('open');
+    expect(el.textContent).toContain('Body');
+  });
 });
