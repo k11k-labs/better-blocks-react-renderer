@@ -1325,4 +1325,139 @@ describe('BlocksRenderer', () => {
     expect(el).toHaveAttribute('open');
     expect(el.textContent).toContain('Body');
   });
+
+  it('renders a link-mode button with href, target, rel, aria-label and alignment', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'link',
+        label: 'Get started',
+        alignment: 'center',
+        link: {
+          url: 'https://example.com',
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          ariaLabel: 'Get started now',
+        },
+        style: { backgroundColor: '#4945ff', textColor: '#ffffff', borderRadius: '4px' },
+        cssClass: 'my-cta',
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const wrapper = container.querySelector('.bb-button-wrapper');
+    expect(wrapper).toHaveStyle({ textAlign: 'center' });
+    const a = container.querySelector('a.bb-button');
+    expect(a).toHaveAttribute('href', 'https://example.com');
+    expect(a).toHaveAttribute('target', '_blank');
+    expect(a).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(a).toHaveAttribute('aria-label', 'Get started now');
+    expect(a).toHaveClass('my-cta');
+    expect(a?.textContent).toBe('Get started');
+    expect(a).toHaveStyle({ backgroundColor: '#4945ff', color: '#ffffff', borderRadius: '4px' });
+  });
+
+  it('renders a file-mode button with download, icon and human-readable size', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'file',
+        label: 'Download whitepaper',
+        alignment: 'left',
+        file: {
+          id: 123,
+          url: '/uploads/whitepaper.pdf',
+          name: 'Product Whitepaper.pdf',
+          size: 5242880,
+          ext: '.pdf',
+          mime: 'application/pdf',
+        },
+        showFileSize: true,
+        showFileIcon: true,
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button');
+    expect(a).toHaveAttribute('href', '/uploads/whitepaper.pdf');
+    expect(a).toHaveAttribute('download', 'Product Whitepaper.pdf');
+    expect(a).toHaveAttribute('aria-label', 'Download Product Whitepaper.pdf');
+    expect(a?.querySelector('.bb-button-icon')?.textContent?.trim()).toBe('📄');
+    expect(a?.querySelector('.bb-button-size')?.textContent).toBe(' (5 MB)');
+    expect(a?.textContent).toContain('Download whitepaper');
+  });
+
+  it('omits size and icon in file mode when their flags are off', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'file',
+        label: 'Download',
+        file: { url: '/uploads/f.zip', name: 'f.zip', size: 1024, ext: '.zip' },
+        showFileSize: false,
+        showFileIcon: false,
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button');
+    expect(a?.querySelector('.bb-button-icon')).toBeNull();
+    expect(a?.querySelector('.bb-button-size')).toBeNull();
+  });
+
+  it('exposes hover colors as CSS custom properties', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'link',
+        label: 'Hover me',
+        link: { url: '#' },
+        style: { hoverBackgroundColor: '#3732c9', hoverTextColor: '#fff' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button') as HTMLElement;
+    expect(a.style.getPropertyValue('--bb-button-hover-bg')).toBe('#3732c9');
+    expect(a.style.getPropertyValue('--bb-button-hover-color')).toBe('#fff');
+  });
+
+  it('renders inline (no wrapper) when alignment is "none"', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'link',
+        label: 'Inline',
+        alignment: 'none',
+        link: { url: '#' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('.bb-button-wrapper')).toBeNull();
+    expect(container.querySelector('a.bb-button')?.textContent).toBe('Inline');
+  });
+
+  it('uses a custom button renderer via the blocks override', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'link',
+        label: 'Custom',
+        alignment: 'right',
+        link: { url: 'https://example.com' },
+      },
+    ];
+    render(
+      <BlocksRenderer
+        content={content}
+        blocks={{
+          button: ({ label, link, alignment }) => (
+            <div data-testid="custom-button" data-align={alignment}>
+              <a href={link?.url}>{label}</a>
+            </div>
+          ),
+        }}
+      />
+    );
+    const el = screen.getByTestId('custom-button');
+    expect(el).toHaveAttribute('data-align', 'right');
+    expect(el.querySelector('a')).toHaveAttribute('href', 'https://example.com');
+    expect(el.textContent).toBe('Custom');
+  });
 });

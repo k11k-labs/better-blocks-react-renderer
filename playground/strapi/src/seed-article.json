@@ -1482,6 +1482,60 @@
       ]
     },
     {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Buttons (CTA & File Download)" }]
+    },
+    {
+      "type": "button",
+      "buttonType": "link",
+      "label": "Get started",
+      "alignment": "center",
+      "link": {
+        "url": "https://github.com/k11k-labs/strapi-plugin-better-blocks",
+        "target": "_blank",
+        "rel": "noopener noreferrer",
+        "ariaLabel": "Get started with Better Blocks"
+      },
+      "style": {
+        "backgroundColor": "#4945ff",
+        "textColor": "#ffffff",
+        "borderRadius": "4px",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "padding": "12px 24px",
+        "border": "none",
+        "hoverBackgroundColor": "#3732c9",
+        "hoverTextColor": "#ffffff"
+      }
+    },
+    {
+      "type": "button",
+      "buttonType": "file",
+      "label": "Download asset",
+      "alignment": "center",
+      "file": {
+        "url": "/uploads/placeholder.svg",
+        "name": "better-blocks.svg",
+        "size": 0,
+        "ext": ".svg",
+        "mime": "image/svg+xml"
+      },
+      "showFileSize": true,
+      "showFileIcon": true,
+      "style": {
+        "backgroundColor": "#ffffff",
+        "textColor": "#4945ff",
+        "borderRadius": "4px",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "padding": "12px 24px",
+        "border": "1px solid #4945ff",
+        "hoverBackgroundColor": "#f4f0ff",
+        "hoverTextColor": "#3732c9"
+      }
+    },
+    {
       "type": "paragraph",
       "children": [
         {

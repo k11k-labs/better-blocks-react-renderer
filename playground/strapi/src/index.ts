@@ -127,6 +127,22 @@ export default {
             size: uploadedImage.size,
           };
         }
+
+        // Point the file-download button at the uploaded asset so the
+        // download link, size, and icon resolve to a real file.
+        const fileButton = articleData.content.find(
+          (block: any) => block.type === 'button' && block.buttonType === 'file'
+        );
+        if (fileButton) {
+          fileButton.file = {
+            id: uploadedImage.id,
+            url: uploadedImage.url,
+            name: uploadedImage.name || 'better-blocks.svg',
+            size: uploadedImage.size ? Math.round(Number(uploadedImage.size) * 1024) : 0,
+            ext: uploadedImage.ext || '.svg',
+            mime: uploadedImage.mime || 'image/svg+xml',
+          };
+        }
       }
 
       const article = await strapi.documents('api::article.article').create({

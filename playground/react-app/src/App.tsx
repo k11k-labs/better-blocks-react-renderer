@@ -64,11 +64,41 @@ const customBlocks: CustomBlocksConfig = {
       <div style={{ padding: '0 16px 8px' }}>{children}</div>
     </details>
   ),
+  // A custom button renderer that fully replaces the default markup with a
+  // pill-shaped CTA. It receives label, link/file, alignment, style, etc.
+  button: ({ label, link, file, buttonType, alignment }) => (
+    <div style={{ textAlign: alignment === 'none' ? undefined : alignment, margin: '12px 0' }}>
+      <a
+        className="custom-button"
+        href={buttonType === 'file' ? file?.url : link?.url}
+        target={link?.target}
+        rel={link?.rel}
+        download={buttonType === 'file' ? file?.name : undefined}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          lineHeight: 1,
+          background: 'linear-gradient(135deg, #7c3aed, #4945ff)',
+          color: '#fff',
+          textDecoration: 'none',
+          fontWeight: 700,
+          padding: '12px 28px',
+          borderRadius: 999,
+        }}
+      >
+        <span aria-hidden="true">{buttonType === 'file' ? '⬇' : '✨'}</span>
+        {label}
+      </a>
+    </div>
+  ),
 };
 
-// GitHub-style CSS targeting the DEFAULT details markup (bb-details classes).
-// This proves the default output can be themed with plain CSS, no override.
-const githubDetailsCss = `
+// Plain CSS targeting the DEFAULT block markup (bb-details / bb-button classes).
+// This proves the default output can be themed with CSS alone — GitHub-style
+// disclosures and the button hover/focus states, no `blocks` override needed.
+const playgroundCss = `
 .gh-details .bb-details {
   border: 1px solid #d0d7de;
   border-radius: 6px;
@@ -128,6 +158,38 @@ const githubDetailsCss = `
 .custom-details > div > :last-child {
   margin-bottom: 0;
 }
+
+/* Wire up the hover custom properties the renderer emits on default buttons,
+   plus a smooth transition and a visible keyboard focus ring. The base colors
+   are set inline by the renderer, so the hover rule needs !important to win
+   over inline styles (the documented approach). */
+.bb-button {
+  text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.bb-button:hover {
+  background-color: var(--bb-button-hover-bg) !important;
+  color: var(--bb-button-hover-color) !important;
+}
+.bb-button:focus-visible {
+  outline: 2px solid #4945ff;
+  outline-offset: 2px;
+}
+
+/* The custom (pill) button has no hover colors from the block, so we add a
+   generic lift/brighten hover here to show overrides can define their own. */
+.custom-button {
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+.custom-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 18px rgba(73, 69, 255, 0.35);
+}
+.custom-button:focus-visible {
+  outline: 2px solid #4945ff;
+  outline-offset: 2px;
+}
 `;
 
 function App() {
@@ -159,7 +221,7 @@ function App() {
 
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: 24, fontFamily: 'system-ui' }}>
-      <style>{githubDetailsCss}</style>
+      <style>{playgroundCss}</style>
       <h1>Better Blocks Renderer Playground</h1>
       <p style={{ color: '#666', marginBottom: 32 }}>
         Fetching articles from Strapi at <code>localhost:1337</code> and rendering with{' '}
@@ -187,6 +249,7 @@ function App() {
         // focused on callouts (not a second copy of the whole article).
         const callouts = article.content.filter((block) => block.type === 'callout');
         const details = article.content.filter((block) => block.type === 'details');
+        const buttons = article.content.filter((block) => block.type === 'button');
 
         return (
           <article
@@ -281,6 +344,51 @@ function App() {
                   (purple box, emoji marker) instead of the built-in default.
                 </p>
                 <BlocksRenderer content={details} blocks={customBlocks} />
+              </section>
+            )}
+
+            {buttons.length > 0 && (
+              <section
+                style={{
+                  marginTop: 40,
+                  paddingTop: 16,
+                  borderTop: '2px dashed #c7d2fe',
+                }}
+              >
+                <h2
+                  style={{
+                    color: '#4945ff',
+                    fontSize: 13,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
+                >
+                  ⑤ Buttons &mdash; default rendering (inline styles + hover via CSS variables)
+                </h2>
+                <p style={{ color: '#666', fontSize: 14, marginTop: 0 }}>
+                  The same buttons as in the article above. Hover them &mdash; the{' '}
+                  <code>hoverBackgroundColor</code> / <code>hoverTextColor</code> from the block are
+                  exposed as CSS custom properties and wired up with a single{' '}
+                  <code>.bb-button:hover</code> rule. The file button downloads a real asset.
+                </p>
+                <BlocksRenderer content={buttons} />
+
+                <h2
+                  style={{
+                    color: '#7c3aed',
+                    fontSize: 13,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    marginTop: 32,
+                  }}
+                >
+                  ⑥ Custom button renderer &mdash; via the <code>blocks</code> override
+                </h2>
+                <p style={{ color: '#666', fontSize: 14, marginTop: 0 }}>
+                  The same buttons re-rendered with a custom <code>button</code> component
+                  (pill-shaped gradient CTA) instead of the built-in default.
+                </p>
+                <BlocksRenderer content={buttons} blocks={customBlocks} />
               </section>
             )}
           </article>
