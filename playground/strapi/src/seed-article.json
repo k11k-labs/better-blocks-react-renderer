@@ -1411,6 +1411,77 @@
       ]
     },
     {
+      "type": "heading",
+      "level": 2,
+      "children": [{ "type": "text", "text": "Details / Summary (Collapsible)" }]
+    },
+    {
+      "type": "details",
+      "summary": "Click to expand",
+      "defaultOpen": false,
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "This content is hidden until you open the disclosure. It renders as native, accessible "
+            },
+            { "type": "text", "text": "<details>", "code": true },
+            { "type": "text", "text": " / " },
+            { "type": "text", "text": "<summary>", "code": true },
+            { "type": "text", "text": " HTML." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "details",
+      "summary": "Open by default, with nested content",
+      "defaultOpen": true,
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            { "type": "text", "text": "This block uses " },
+            { "type": "text", "text": "defaultOpen", "code": true },
+            { "type": "text", "text": " and can hold any block-level content, including lists:" }
+          ]
+        },
+        {
+          "type": "list",
+          "format": "unordered",
+          "children": [
+            {
+              "type": "list-item",
+              "children": [{ "type": "text", "text": "Paragraphs" }]
+            },
+            {
+              "type": "list-item",
+              "children": [{ "type": "text", "text": "Lists" }]
+            },
+            {
+              "type": "list-item",
+              "children": [{ "type": "text", "text": "Even nested disclosures" }]
+            }
+          ]
+        },
+        {
+          "type": "details",
+          "summary": "Nested details",
+          "defaultOpen": false,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                { "type": "text", "text": "Details blocks can be arbitrarily nested." }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "type": "paragraph",
       "children": [
         {
