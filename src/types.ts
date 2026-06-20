@@ -153,6 +153,49 @@ export type DetailsNode = {
   children: BlockNode[];
 };
 
+export type ButtonAlignment = 'left' | 'center' | 'right' | 'none';
+
+export type ButtonLink = {
+  url: string;
+  target?: '_self' | '_blank' | '_parent' | '_top';
+  rel?: string;
+  ariaLabel?: string;
+};
+
+export type ButtonFile = {
+  id?: number;
+  url: string;
+  name: string;
+  size?: number;
+  ext?: string;
+  mime?: string;
+};
+
+export type ButtonStyle = {
+  backgroundColor?: string;
+  textColor?: string;
+  borderRadius?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  padding?: string;
+  border?: string;
+  hoverBackgroundColor?: string;
+  hoverTextColor?: string;
+};
+
+export type ButtonElement = {
+  type: 'button';
+  buttonType: 'link' | 'file';
+  label: string;
+  alignment?: ButtonAlignment;
+  link?: ButtonLink;
+  file?: ButtonFile;
+  showFileSize?: boolean;
+  showFileIcon?: boolean;
+  style?: ButtonStyle;
+  cssClass?: string;
+};
+
 export type BlockNode =
   | ParagraphNode
   | HeadingNode
@@ -166,7 +209,8 @@ export type BlockNode =
   | MathNode
   | DiagramNode
   | CalloutNode
-  | DetailsNode;
+  | DetailsNode
+  | ButtonElement;
 
 export type BlocksContent = BlockNode[];
 
@@ -222,6 +266,17 @@ export type CustomBlocksConfig = Partial<{
   diagram: ComponentType<{ code: string; format: 'mermaid' }>;
   callout: ComponentType<BlockComponentProps<{ variant: CalloutVariant; title?: string }>>;
   details: ComponentType<BlockComponentProps<{ summary: string; defaultOpen?: boolean }>>;
+  button: ComponentType<{
+    label: string;
+    buttonType: 'link' | 'file';
+    alignment?: ButtonAlignment;
+    link?: ButtonLink;
+    file?: ButtonFile;
+    showFileSize?: boolean;
+    showFileIcon?: boolean;
+    style?: ButtonStyle;
+    cssClass?: string;
+  }>;
 }>;
 
 export type FontFamilyModifierProps = {

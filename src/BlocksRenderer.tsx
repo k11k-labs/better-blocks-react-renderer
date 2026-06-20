@@ -12,6 +12,9 @@ import { MermaidDiagram } from './MermaidDiagram';
 import type {
   BlockNode,
   BlocksRendererProps,
+  ButtonElement,
+  ButtonFile,
+  ButtonStyle,
   CalloutNode,
   CalloutVariant,
   CodeNode,
@@ -384,6 +387,8 @@ function renderBlock(
       return renderCallout(block, key, blocks, modifiers);
     case 'details':
       return renderDetails(block, key, blocks, modifiers);
+    case 'button':
+      return renderButton(block, key, blocks);
     default:
       return null;
   }
@@ -700,6 +705,170 @@ function renderDetails(
       <summary className="bb-details-summary">{block.summary}</summary>
       {children}
     </details>
+  );
+}
+
+// ── Button (CTA / File Download) Rendering ───────────────────────────
+
+// Emoji icons keyed by file extension (falls back to a MIME-type group, then a
+// generic paperclip). Mirrors the icon mapping in the editor's button modal.
+const FILE_ICONS: Record<string, string> = {
+  pdf: '📄',
+  doc: '📝',
+  docx: '📝',
+  txt: '📃',
+  md: '📃',
+  rtf: '📃',
+  xls: '📊',
+  xlsx: '📊',
+  csv: '📊',
+  ppt: '📽️',
+  pptx: '📽️',
+  zip: '🗜️',
+  rar: '🗜️',
+  '7z': '🗜️',
+  gz: '🗜️',
+  tar: '🗜️',
+  png: '🖼️',
+  jpg: '🖼️',
+  jpeg: '🖼️',
+  gif: '🖼️',
+  svg: '🖼️',
+  webp: '🖼️',
+  mp3: '🎵',
+  wav: '🎵',
+  ogg: '🎵',
+  mp4: '🎬',
+  mov: '🎬',
+  avi: '🎬',
+  webm: '🎬',
+};
+
+function getFileIcon(file: ButtonFile): string {
+  const ext = (file.ext ?? '').replace(/^\./, '').toLowerCase();
+  if (ext && FILE_ICONS[ext]) return FILE_ICONS[ext];
+
+  const mime = file.mime ?? '';
+  if (mime.startsWith('image/')) return '🖼️';
+  if (mime.startsWith('audio/')) return '🎵';
+  if (mime.startsWith('video/')) return '🎬';
+  if (mime === 'application/pdf') return '📄';
+  return '📎';
+}
+
+// Human-readable byte size, e.g. 5242880 → "5 MB".
+function formatFileSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.min(units.length - 1, Math.floor(Math.log(bytes) / Math.log(1024)));
+  const value = bytes / Math.pow(1024, i);
+  const rounded = i === 0 ? Math.round(value) : Math.round(value * 10) / 10;
+  return `${rounded} ${units[i]}`;
+}
+
+function getButtonStyle(style?: ButtonStyle): CSSProperties {
+  // Sensible defaults so an unstyled button still looks like a button. Hover
+  // colors can't be expressed inline, so they're exposed as CSS custom
+  // properties for consumers to wire up (see README).
+  const out: Record<string, string | number> = {
+    display: 'inline-block',
+    textDecoration: 'none',
+    cursor: 'pointer',
+  };
+  if (!style) return out as CSSProperties;
+  if (style.backgroundColor) out.backgroundColor = style.backgroundColor;
+  if (style.textColor) out.color = style.textColor;
+  if (style.borderRadius) out.borderRadius = style.borderRadius;
+  if (style.fontSize) out.fontSize = style.fontSize;
+  if (style.fontWeight) out.fontWeight = style.fontWeight;
+  if (style.padding) out.padding = style.padding;
+  if (style.border) out.border = style.border;
+  if (style.hoverBackgroundColor) out['--bb-button-hover-bg'] = style.hoverBackgroundColor;
+  if (style.hoverTextColor) out['--bb-button-hover-color'] = style.hoverTextColor;
+  return out as CSSProperties;
+}
+
+function renderButton(block: ButtonElement, key: number, blocks?: CustomBlocksConfig): ReactNode {
+  const ButtonComp = blocks?.button;
+  if (ButtonComp) {
+    return (
+      <ButtonComp
+        key={key}
+        label={block.label}
+        buttonType={block.buttonType}
+        alignment={block.alignment}
+        link={block.link}
+        file={block.file}
+        showFileSize={block.showFileSize}
+        showFileIcon={block.showFileIcon}
+        style={block.style}
+        cssClass={block.cssClass}
+      />
+    );
+  }
+
+  const style = getButtonStyle(block.style);
+  const className = block.cssClass ? `bb-button ${block.cssClass}` : 'bb-button';
+
+  let control: ReactNode;
+  if (block.buttonType === 'file' && block.file) {
+    const file = block.file;
+    const icon = block.showFileIcon ? getFileIcon(file) : null;
+    const size =
+      block.showFileSize && typeof file.size === 'number' ? formatFileSize(file.size) : null;
+    control = (
+      <a
+        href={file.url}
+        download={file.name}
+        aria-label={`Download ${file.name}`}
+        className={className}
+        style={style}
+      >
+        {icon && (
+          <span className="bb-button-icon" aria-hidden="true">
+            {icon}{' '}
+          </span>
+        )}
+        {block.label}
+        {size && <span className="bb-button-size"> ({size})</span>}
+      </a>
+    );
+  } else if (block.link) {
+    const link = block.link;
+    control = (
+      <a
+        href={link.url}
+        target={link.target}
+        rel={link.rel}
+        aria-label={link.ariaLabel}
+        className={className}
+        style={style}
+      >
+        {block.label}
+      </a>
+    );
+  } else {
+    // No link/file payload — render the label as a styled, non-navigating span.
+    control = (
+      <span className={className} style={style}>
+        {block.label}
+      </span>
+    );
+  }
+
+  const alignment = block.alignment ?? 'left';
+  if (alignment === 'none') {
+    return <Fragment key={key}>{control}</Fragment>;
+  }
+
+  return (
+    <div
+      key={key}
+      className="bb-button-wrapper"
+      style={{ textAlign: alignment, margin: '0.5rem 0' }}
+    >
+      {control}
+    </div>
   );
 }
 
