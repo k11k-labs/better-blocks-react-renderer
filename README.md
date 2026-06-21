@@ -179,7 +179,14 @@ To match your design system, override the `details` block. It receives `summary`
 Block-level `button` nodes render a WordPress-style call-to-action. The `buttonType` selects the mode:
 
 - **`link`** &mdash; renders `<a href={link.url} target={link.target} rel={link.rel} aria-label={link.ariaLabel}>{label}</a>`.
-- **`file`** &mdash; renders a download link `<a href={file.url} download={file.name} aria-label="Download …">`, optionally prefixed with a file-type icon (`showFileIcon`) and suffixed with a human-readable size (`showFileSize`). Clicking force-downloads the file via a blob fetch, which works even when the asset is hosted cross-origin (where the native `download` attribute is otherwise ignored and the browser previews PDFs/videos/images inline). If the fetch is CORS-blocked, it falls back to native navigation. Set `filePreview: true` to instead open the file in a new tab (`target="_blank" rel="noopener noreferrer"`, no download) so users can preview it before saving.
+- **`file`** &mdash; renders a download link `<a href={file.url} download={file.name} aria-label="Download …">`, optionally prefixed with a file-type icon (`showFileIcon`) and suffixed with a human-readable size (`showFileSize`). Clicking force-downloads the file via a blob fetch (so renderable types like PDF/video/images download instead of opening inline, which the native `download` attribute can't guarantee). Set `filePreview: true` to instead open the file in a new tab (`target="_blank" rel="noopener noreferrer"`, no download) so users can preview it before saving.
+
+**Cross-origin downloads.** Forcing a download only works for **same-origin** assets (e.g. Strapi's local upload provider) or cross-origin hosts that send CORS headers. For a cross-origin asset **without** CORS (some CDN / cloud upload providers), the browser blocks the blob fetch _and_ ignores the `download` attribute, so the renderer falls back to opening the file. This is a browser security limitation, not something a client-side renderer can work around &mdash; fix it on the server instead:
+
+- Serve the asset with `Content-Disposition: attachment` (most reliable; then even a plain link downloads, no CORS needed).
+- Enable CORS (`Access-Control-Allow-Origin`) on the asset host so the blob fetch can read the file.
+- Proxy uploads through your site's own origin so they're same-origin.
+- Or use a provider flag, e.g. Cloudinary `fl_attachment` or S3 `response-content-disposition`.
 
 The `style` object is applied as inline CSS (`backgroundColor`, `color` &larr; `textColor`, `borderRadius`, `fontSize`, `fontWeight`, `padding`, `border`). The block is wrapped in a `<div className="bb-button-wrapper">` whose `text-align` honors `alignment` (`left` / `center` / `right`); `alignment: "none"` renders the button inline with no wrapper. A `cssClass` is appended to the default `bb-button` class.
 
