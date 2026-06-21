@@ -183,12 +183,14 @@ Block-level `button` nodes render a WordPress-style call-to-action. The `buttonT
 
 The `style` object is applied as inline CSS (`backgroundColor`, `color` &larr; `textColor`, `borderRadius`, `fontSize`, `fontWeight`, `padding`, `border`). The block is wrapped in a `<div className="bb-button-wrapper">` whose `text-align` honors `alignment` (`left` / `center` / `right`); `alignment: "none"` renders the button inline with no wrapper. A `cssClass` is appended to the default `bb-button` class.
 
-**Hover colors.** `hoverBackgroundColor` / `hoverTextColor` can't be expressed with inline `style`, so they're exposed as CSS custom properties (`--bb-button-hover-bg`, `--bb-button-hover-color`) on the element. Wire them up with one CSS rule. Because the base colors are applied as inline styles, the hover rule needs `!important` to override them:
+**Hover colors.** `hoverBackgroundColor` / `hoverTextColor` work out of the box &mdash; no setup, no stylesheet import. The renderer ships a small `<style>` (emitted once, only when a default button is present) that wires the hover and `:focus-visible` states to the `--bb-button-hover-bg` / `--bb-button-hover-color` custom properties it sets from those fields. Buttons without hover colors keep their base colors on hover.
+
+To customize the hover behavior, target `.bb-button:hover` yourself. Because the base colors are applied inline, your rule needs `!important` to win:
 
 ```css
 .bb-button:hover {
-  background-color: var(--bb-button-hover-bg) !important;
-  color: var(--bb-button-hover-color) !important;
+  background-color: #3732c9 !important;
+  color: #fff !important;
 }
 ```
 

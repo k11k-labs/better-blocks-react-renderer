@@ -711,6 +711,30 @@ function renderDetails(
 
 // ── Button (CTA / File Download) Rendering ───────────────────────────
 
+// Default button styling shipped with the renderer so hover/focus work with
+// zero setup (no stylesheet import, no consumer CSS). Hover colors come from the
+// `--bb-button-hover-*` custom properties getButtonStyle() sets, falling back to
+// the base color props (`--bb-button-*`) so a button without hover colors keeps
+// its colors on hover. `!important` lets these win over the inline base colors.
+const BUTTON_HOVER_CSS =
+  '.bb-button{transition:background-color .15s ease,color .15s ease}' +
+  '.bb-button:hover{' +
+  'background-color:var(--bb-button-hover-bg,var(--bb-button-bg))!important;' +
+  'color:var(--bb-button-hover-color,var(--bb-button-color))!important}' +
+  '.bb-button:focus-visible{outline:2px solid currentColor;outline-offset:2px}';
+
+// True if any block in the tree renders a default (non-overridden) button, so we
+// only inject the style when it's actually needed. Recurses into child arrays
+// (e.g. buttons nested inside a details block).
+function contentHasButton(nodes: BlockNode[]): boolean {
+  for (const node of nodes) {
+    if (node.type === 'button') return true;
+    const children = (node as { children?: unknown }).children;
+    if (Array.isArray(children) && contentHasButton(children as BlockNode[])) return true;
+  }
+  return false;
+}
+
 // Emoji icons keyed by file extension (falls back to a MIME-type group, then a
 // generic paperclip). Mirrors the icon mapping in the editor's button modal.
 const FILE_ICONS: Record<string, string> = {
@@ -769,16 +793,26 @@ function formatFileSize(bytes: number): string {
 
 function getButtonStyle(style?: ButtonStyle): CSSProperties {
   // Sensible defaults so an unstyled button still looks like a button. Hover
-  // colors can't be expressed inline, so they're exposed as CSS custom
-  // properties for consumers to wire up (see README).
+  // colors can't be set inline, so they ride along as CSS custom properties
+  // that the default hover rule (see BUTTON_HOVER_CSS) consumes.
   const out: Record<string, string | number> = {
     display: 'inline-block',
     textDecoration: 'none',
     cursor: 'pointer',
   };
   if (!style) return out as CSSProperties;
-  if (style.backgroundColor) out.backgroundColor = style.backgroundColor;
-  if (style.textColor) out.color = style.textColor;
+  // Mirror the base colors into custom properties too, so the `:hover` rule can
+  // fall back to them when no hover color is set (otherwise an unset hover var
+  // would compute to inherited/transparent on hover and the button would lose
+  // its color).
+  if (style.backgroundColor) {
+    out.backgroundColor = style.backgroundColor;
+    out['--bb-button-bg'] = style.backgroundColor;
+  }
+  if (style.textColor) {
+    out.color = style.textColor;
+    out['--bb-button-color'] = style.textColor;
+  }
   if (style.borderRadius) out.borderRadius = style.borderRadius;
   if (style.fontSize) out.fontSize = style.fontSize;
   if (style.fontWeight) out.fontWeight = style.fontWeight;
@@ -945,5 +979,15 @@ export function BlocksRenderer({ content, blocks, modifiers }: BlocksRendererPro
     return null;
   }
 
-  return <>{content.map((block, index) => renderBlock(block, index, blocks, modifiers))}</>;
+  // Ship the default button hover/focus styles inline when the content renders
+  // a built-in button (skipped when the consumer overrides the `button` block,
+  // since their markup won't use the `.bb-button` class).
+  const needsButtonCss = !blocks?.button && contentHasButton(content);
+
+  return (
+    <>
+      {needsButtonCss && <style>{BUTTON_HOVER_CSS}</style>}
+      {content.map((block, index) => renderBlock(block, index, blocks, modifiers))}
+    </>
+  );
 }
