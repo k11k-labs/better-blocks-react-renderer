@@ -3,6 +3,7 @@ import {
   cloneElement,
   isValidElement,
   type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
   type ReactElement,
   type ReactNode,
 } from 'react';
@@ -788,6 +789,51 @@ function getButtonStyle(style?: ButtonStyle): CSSProperties {
   return out as CSSProperties;
 }
 
+// Forces a real file download instead of letting the browser preview it.
+// The native `download` attribute is ignored for cross-origin URLs (the common
+// case for Strapi/CDN assets), so browsers open renderable files (PDF, video,
+// images) inline. We fetch the asset as a blob and trigger a download from a
+// same-origin object URL. If that fails (e.g. CORS-blocked), we fall back to
+// native navigation so the link still does something.
+function handleFileDownload(
+  event: ReactMouseEvent<HTMLAnchorElement>,
+  url: string,
+  name: string
+): void {
+  // Respect modifier clicks (open in new tab, etc.) and non-primary buttons.
+  if (
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return;
+  }
+
+  event.preventDefault();
+
+  void (async () => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = objectUrl;
+      anchor.download = name;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      // CORS-blocked or offline — fall back to native navigation.
+      window.location.href = url;
+    }
+  })();
+}
+
 function renderButton(block: ButtonElement, key: number, blocks?: CustomBlocksConfig): ReactNode {
   const ButtonComp = blocks?.button;
   if (ButtonComp) {
@@ -801,6 +847,7 @@ function renderButton(block: ButtonElement, key: number, blocks?: CustomBlocksCo
         file={block.file}
         showFileSize={block.showFileSize}
         showFileIcon={block.showFileIcon}
+        filePreview={block.filePreview}
         style={block.style}
         cssClass={block.cssClass}
       />
@@ -816,13 +863,32 @@ function renderButton(block: ButtonElement, key: number, blocks?: CustomBlocksCo
     const icon = block.showFileIcon ? getFileIcon(file) : null;
     const size =
       block.showFileSize && typeof file.size === 'number' ? formatFileSize(file.size) : null;
-    control = (
+    const filePreview = block.filePreview === true;
+    control = filePreview ? (
+      <a
+        href={file.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Preview ${file.name}`}
+        className={className}
+        style={style}
+      >
+        {icon && (
+          <span className="bb-button-icon" aria-hidden="true">
+            {icon}{' '}
+          </span>
+        )}
+        {block.label}
+        {size && <span className="bb-button-size"> ({size})</span>}
+      </a>
+    ) : (
       <a
         href={file.url}
         download={file.name}
         aria-label={`Download ${file.name}`}
         className={className}
         style={style}
+        onClick={(event) => handleFileDownload(event, file.url, file.name)}
       >
         {icon && (
           <span className="bb-button-icon" aria-hidden="true">

@@ -76,35 +76,47 @@ export default {
     const articleCount = await strapi.db.query('api::article.article').count();
 
     if (articleCount === 0) {
-      // Upload the seed SVG image to Media Library
-      const svgPath = path.resolve(process.cwd(), 'src', 'better-blocks.svg');
-      let uploadedImage: Record<string, unknown> | null = null;
+      const uploadService = strapi.plugin('upload').service('upload');
 
-      if (fs.existsSync(svgPath)) {
-        const stats = fs.statSync(svgPath);
-        const uploadService = strapi.plugin('upload').service('upload');
-
-        const fileStat = {
-          filepath: svgPath,
-          originalFilename: 'better-blocks.svg',
-          mimetype: 'image/svg+xml',
-          size: stats.size,
-        };
-
+      // Upload a single asset from src/ to the Media Library and return it.
+      const uploadAsset = async (
+        filename: string,
+        mimetype: string,
+        fileInfo: Record<string, unknown>
+      ): Promise<Record<string, unknown> | null> => {
+        const filepath = path.resolve(process.cwd(), 'src', filename);
+        if (!fs.existsSync(filepath)) return null;
+        const stats = fs.statSync(filepath);
         const [uploaded] = await uploadService.upload({
-          data: {
-            fileInfo: {
-              name: 'better-blocks.svg',
-              alternativeText: 'Better Blocks logo',
-              caption: 'Better Blocks plugin banner',
-            },
+          data: { fileInfo },
+          files: {
+            filepath,
+            originalFilename: filename,
+            mimetype,
+            size: stats.size,
           },
-          files: fileStat,
         });
+        strapi.log.info(`Uploaded seed asset: ${filename}`);
+        return uploaded;
+      };
 
-        uploadedImage = uploaded;
-        strapi.log.info('Uploaded seed image: better-blocks.svg');
-      }
+      // Upload the seed SVG image to the Media Library
+      const uploadedImage = await uploadAsset('better-blocks.svg', 'image/svg+xml', {
+        name: 'better-blocks.svg',
+        alternativeText: 'Better Blocks logo',
+        caption: 'Better Blocks plugin banner',
+      });
+
+      // Upload the sample download/preview files (PDF + DOCX)
+      const uploadedPdf = await uploadAsset('sample.pdf', 'application/pdf', {
+        name: 'sample.pdf',
+        caption: 'Sample PDF for the download/preview button',
+      });
+      const uploadedDocx = await uploadAsset(
+        'sample.docx',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        { name: 'sample.docx', caption: 'Sample DOCX for the download button' }
+      );
 
       // Build article data, replacing placeholder image with uploaded one
       const articleData = JSON.parse(JSON.stringify(seedArticle));
@@ -128,21 +140,29 @@ export default {
           };
         }
 
-        // Point the file-download button at the uploaded asset so the
-        // download link, size, and icon resolve to a real file.
-        const fileButton = articleData.content.find(
-          (block: any) => block.type === 'button' && block.buttonType === 'file'
-        );
-        if (fileButton) {
-          fileButton.file = {
-            id: uploadedImage.id,
-            url: uploadedImage.url,
-            name: uploadedImage.name || 'better-blocks.svg',
-            size: uploadedImage.size ? Math.round(Number(uploadedImage.size) * 1024) : 0,
-            ext: uploadedImage.ext || '.svg',
-            mime: uploadedImage.mime || 'image/svg+xml',
-          };
-        }
+      }
+
+      // Point each file-download button at its matching uploaded asset (by the
+      // placeholder extension in the seed) so links, sizes, and icons resolve
+      // to real files.
+      const assetsByExt: Record<string, Record<string, unknown> | null> = {
+        '.pdf': uploadedPdf,
+        '.docx': uploadedDocx,
+        '.svg': uploadedImage,
+      };
+      for (const block of articleData.content as any[]) {
+        if (block.type !== 'button' || block.buttonType !== 'file' || !block.file) continue;
+        const asset = assetsByExt[block.file.ext as string];
+        if (!asset) continue;
+        block.file = {
+          id: asset.id,
+          url: asset.url,
+          name: asset.name || block.file.name,
+          // Strapi reports size in KB; convert to bytes for the renderer.
+          size: asset.size ? Math.round(Number(asset.size) * 1024) : 0,
+          ext: asset.ext || block.file.ext,
+          mime: asset.mime || block.file.mime,
+        };
       }
 
       const article = await strapi.documents('api::article.article').create({
