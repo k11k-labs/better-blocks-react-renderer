@@ -1493,6 +1493,63 @@ describe('BlocksRenderer', () => {
     expect(a.style.getPropertyValue('--bb-button-hover-color')).toBe('#fff');
   });
 
+  it('mirrors base colors into custom properties for the hover fallback', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'link',
+        label: 'Styled',
+        link: { url: '#' },
+        style: { backgroundColor: '#4945ff', textColor: '#fff' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button') as HTMLElement;
+    expect(a.style.getPropertyValue('--bb-button-bg')).toBe('#4945ff');
+    expect(a.style.getPropertyValue('--bb-button-color')).toBe('#fff');
+  });
+
+  it('ships the default hover/focus CSS so hover works with no consumer setup', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'link',
+        label: 'Hover me',
+        link: { url: '#' },
+        style: { backgroundColor: '#4945ff', hoverBackgroundColor: '#3732c9' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const style = container.querySelector('style');
+    expect(style).not.toBeNull();
+    const css = style?.textContent ?? '';
+    expect(css).toContain('.bb-button:hover');
+    expect(css).toContain('var(--bb-button-hover-bg,var(--bb-button-bg))');
+    expect(css).toContain('!important');
+    expect(css).toContain('.bb-button:focus-visible');
+  });
+
+  it('does not inject the default button CSS when there is no button', () => {
+    const content: BlocksContent = [
+      { type: 'paragraph', children: [{ type: 'text', text: 'No buttons here' }] },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    expect(container.querySelector('style')).toBeNull();
+  });
+
+  it('does not inject the default button CSS when the button block is overridden', () => {
+    const content: BlocksContent = [
+      { type: 'button', buttonType: 'link', label: 'Custom', link: { url: '#' } },
+    ];
+    const { container } = render(
+      <BlocksRenderer
+        content={content}
+        blocks={{ button: ({ label }) => <button>{label}</button> }}
+      />
+    );
+    expect(container.querySelector('style')).toBeNull();
+  });
+
   it('renders inline (no wrapper) when alignment is "none"', () => {
     const content: BlocksContent = [
       {

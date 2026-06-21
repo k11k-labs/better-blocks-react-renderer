@@ -159,21 +159,11 @@ const playgroundCss = `
   margin-bottom: 0;
 }
 
-/* Wire up the hover custom properties the renderer emits on default buttons,
-   plus a smooth transition and a visible keyboard focus ring. The base colors
-   are set inline by the renderer, so the hover rule needs !important to win
-   over inline styles (the documented approach). */
+/* Hover, focus, and transition for default buttons are shipped by the renderer
+   itself (no setup needed) — see the default <style> it emits. We only add a bit
+   of layout polish here to show the default markup is still themeable via CSS. */
 .bb-button {
   text-align: center;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-.bb-button:hover {
-  background-color: var(--bb-button-hover-bg) !important;
-  color: var(--bb-button-hover-color) !important;
-}
-.bb-button:focus-visible {
-  outline: 2px solid #4945ff;
-  outline-offset: 2px;
 }
 
 /* The custom (pill) button has no hover colors from the block, so we add a
