@@ -1,5 +1,22 @@
 # @k11k/better-blocks-react-renderer
 
+## 0.10.0
+
+### Minor Changes
+
+- [#33](https://github.com/k11k-labs/better-blocks-react-renderer/pull/33) [`e5cc53c`](https://github.com/k11k-labs/better-blocks-react-renderer/commit/e5cc53cd16d2511d7d31ac0fb61fe2c31b82eeec) Thanks [@kkukielka](https://github.com/kkukielka)! - feat: fix cross-origin file downloads and add `filePreview` toggle for file buttons
+
+  File-mode buttons now force a real download via a blob fetch, so cross-origin
+  assets (Strapi/CDN) download instead of opening inline in the browser — the
+  native `download` attribute is ignored cross-origin, which made PDFs, videos and
+  images preview rather than save. CORS-blocked fetches fall back to native
+  navigation.
+
+  Adds the `filePreview` option (mirrors the editor field): when `true`, the file
+  opens in a new tab (`target="_blank" rel="noopener noreferrer"`) for preview
+  instead of downloading. `filePreview` is also passed through to custom `button`
+  renderers.
+
 ## 0.9.0
 
 ### Minor Changes
