@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { BlocksRenderer } from '../src';
 import type { BlocksContent } from '../src';
 
@@ -1400,6 +1400,81 @@ describe('BlocksRenderer', () => {
     const a = container.querySelector('a.bb-button');
     expect(a?.querySelector('.bb-button-icon')).toBeNull();
     expect(a?.querySelector('.bb-button-size')).toBeNull();
+  });
+
+  it('opens the file in a new tab (no download) when filePreview is enabled', () => {
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'file',
+        label: 'View report',
+        filePreview: true,
+        file: { url: 'https://cdn.example.com/report.pdf', name: 'report.pdf', ext: '.pdf' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button');
+    expect(a).toHaveAttribute('href', 'https://cdn.example.com/report.pdf');
+    expect(a).toHaveAttribute('target', '_blank');
+    expect(a).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(a).not.toHaveAttribute('download');
+    expect(a).toHaveAttribute('aria-label', 'Preview report.pdf');
+  });
+
+  it('force-downloads a cross-origin file via a blob fetch on click', async () => {
+    const blob = new Blob(['data'], { type: 'application/pdf' });
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, blob: () => Promise.resolve(blob) });
+    vi.stubGlobal('fetch', fetchMock);
+    const createObjectURL = vi.fn(() => 'blob:mock');
+    const revokeObjectURL = vi.fn();
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
+    const clickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, 'click')
+      .mockImplementation(() => undefined);
+
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'file',
+        label: 'Download',
+        file: { url: 'https://cdn.example.com/report.pdf', name: 'report.pdf', ext: '.pdf' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button') as HTMLAnchorElement;
+    expect(a).toHaveAttribute('download', 'report.pdf');
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    fireEvent(a, event);
+    expect(event.defaultPrevented).toBe(true);
+
+    await waitFor(() => expect(createObjectURL).toHaveBeenCalledWith(blob));
+    expect(fetchMock).toHaveBeenCalledWith('https://cdn.example.com/report.pdf');
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:mock');
+
+    clickSpy.mockRestore();
+    vi.unstubAllGlobals();
+  });
+
+  it('does not intercept modified clicks (e.g. open in new tab)', () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const content: BlocksContent = [
+      {
+        type: 'button',
+        buttonType: 'file',
+        label: 'Download',
+        file: { url: 'https://cdn.example.com/report.pdf', name: 'report.pdf', ext: '.pdf' },
+      },
+    ];
+    const { container } = render(<BlocksRenderer content={content} />);
+    const a = container.querySelector('a.bb-button') as HTMLAnchorElement;
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true, metaKey: true });
+    fireEvent(a, event);
+    expect(event.defaultPrevented).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
   });
 
   it('exposes hover colors as CSS custom properties', () => {

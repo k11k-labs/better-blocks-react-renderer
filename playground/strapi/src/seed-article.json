@@ -1510,19 +1510,83 @@
       }
     },
     {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "File buttons can either force a download or open the file in a new tab for preview. The PDF below downloads directly (cross-origin assets no longer open inline), while the second button previews the same PDF. The DOCX downloads natively."
+        }
+      ]
+    },
+    {
       "type": "button",
       "buttonType": "file",
-      "label": "Download asset",
+      "label": "Download PDF",
       "alignment": "center",
       "file": {
-        "url": "/uploads/placeholder.svg",
-        "name": "better-blocks.svg",
+        "url": "/uploads/placeholder.pdf",
+        "name": "sample.pdf",
         "size": 0,
-        "ext": ".svg",
-        "mime": "image/svg+xml"
+        "ext": ".pdf",
+        "mime": "application/pdf"
       },
       "showFileSize": true,
       "showFileIcon": true,
+      "filePreview": false,
+      "style": {
+        "backgroundColor": "#4945ff",
+        "textColor": "#ffffff",
+        "borderRadius": "4px",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "padding": "12px 24px",
+        "border": "none",
+        "hoverBackgroundColor": "#3732c9",
+        "hoverTextColor": "#ffffff"
+      }
+    },
+    {
+      "type": "button",
+      "buttonType": "file",
+      "label": "Preview PDF",
+      "alignment": "center",
+      "file": {
+        "url": "/uploads/placeholder.pdf",
+        "name": "sample.pdf",
+        "size": 0,
+        "ext": ".pdf",
+        "mime": "application/pdf"
+      },
+      "showFileSize": true,
+      "showFileIcon": true,
+      "filePreview": true,
+      "style": {
+        "backgroundColor": "#ffffff",
+        "textColor": "#4945ff",
+        "borderRadius": "4px",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "padding": "12px 24px",
+        "border": "1px solid #4945ff",
+        "hoverBackgroundColor": "#f4f0ff",
+        "hoverTextColor": "#3732c9"
+      }
+    },
+    {
+      "type": "button",
+      "buttonType": "file",
+      "label": "Download DOCX",
+      "alignment": "center",
+      "file": {
+        "url": "/uploads/placeholder.docx",
+        "name": "sample.docx",
+        "size": 0,
+        "ext": ".docx",
+        "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      },
+      "showFileSize": true,
+      "showFileIcon": true,
+      "filePreview": false,
       "style": {
         "backgroundColor": "#ffffff",
         "textColor": "#4945ff",
