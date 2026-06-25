@@ -1488,6 +1488,7 @@
     },
     {
       "type": "button",
+      "children": [{ "type": "text", "text": "" }],
       "buttonType": "link",
       "label": "Get started",
       "alignment": "center",
@@ -1520,6 +1521,7 @@
     },
     {
       "type": "button",
+      "children": [{ "type": "text", "text": "" }],
       "buttonType": "file",
       "label": "Download PDF",
       "alignment": "center",
@@ -1547,6 +1549,7 @@
     },
     {
       "type": "button",
+      "children": [{ "type": "text", "text": "" }],
       "buttonType": "file",
       "label": "Preview PDF",
       "alignment": "center",
@@ -1574,6 +1577,7 @@
     },
     {
       "type": "button",
+      "children": [{ "type": "text", "text": "" }],
       "buttonType": "file",
       "label": "Download DOCX",
       "alignment": "center",
